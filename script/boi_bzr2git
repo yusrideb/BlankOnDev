@@ -1,0 +1,33 @@
+#!perl
+use strict;
+use warnings FATAL => 'all';
+use Data::Dumper;
+use JSON;
+use JSON::XS;
+use BlankOnDev::Utils::file;
+use BlankOnDev::Migration::bazaar2GitHub;
+use Cwd 'abs_path';
+
+# Declare scalar :
+my $url;
+my $options = {
+    'config' => '_config',
+    'addpkg'  => '_add_pkg',
+    'branch'  => '_branch',
+    'execute' => '_execute',
+    'list'    => '_list',
+    'help'    => 'usage'
+};
+
+# For count of Arguments :
+my $arg_len = scalar @ARGV;
+
+# For check arguments :
+if ($arg_len == 0) {
+    BlankOnDev::Migration::bazaar2GitHub->help();
+} else {
+    if (exists $options->{$ARGV[0]}) {
+        my $subr = $options->{$ARGV[0]};
+        BlankOnDev::Migration::bazaar2GitHub->$subr();
+    }
+}
