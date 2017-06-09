@@ -5,7 +5,7 @@ use warnings FATAL => 'all';
 # Version :
 our $VERSION = '0.1004';;
 our $appVer = '0.1';
-our $SubVer = '03';
+our $SubVer = '04';
 
 # boidev.pl version :
 our $boidev_ver = '0.1001';
