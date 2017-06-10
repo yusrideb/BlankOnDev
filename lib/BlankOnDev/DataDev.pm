@@ -42,6 +42,9 @@ sub data_dev {
 
     # Logs for gitpush :
     $data{'prefix_gitpush_fllog'} = 'gitpush_logs_';
+
+    # Logs for git check :
+    $data{'prefix_gitcheck_fllog'} = 'gitcheck_logs_';
     return \%data;
 }
 1;
