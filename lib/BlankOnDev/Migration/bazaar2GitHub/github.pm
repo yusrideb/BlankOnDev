@@ -3,9 +3,11 @@ use strict;
 use warnings FATAL => 'all';
 
 # Import :
+use Data::Dumper;
 use BlankOnDev::DataDev;
 use BlankOnDev::syslog;
 use BlankOnDev::Utils::file;
+use BlankOnDev::Utils::Char;
 use BlankOnDev::command;
 use Capture::Tiny::Extended 'capture';
 
@@ -116,7 +118,7 @@ sub git_push {
     my $cmd_gitremote = $git_remote.' '.$git_url.'/'.$pkg_name.'.git';
     my $cmd_gitpush = "$git_resetHead; rm -rf .bzr; ";
     $cmd_gitpush .= "$cmd_gitremote; ";
-    $cmd_gitpush .= "$git_push";
+    $cmd_gitpush .= "$git_push; ";
     $cmd_gitpush .= "$git_checkout $rilis; ";
     $cmd_gitpush .= "$git_push_repo $rilis";
 #    system("cd $dirOfPkgs; $git_push");
@@ -140,7 +142,10 @@ sub git_push {
     }
     else {
         my $read_errfile = BlankOnDev::Utils::file->read($locfile_errlogs);
-        if ($read_errfile =~ m/(fatal)\:\s(.*)/) {
+        if ($read_errfile =~ m/(new)\s(branch)/) {
+            return 1;
+        }
+        elsif ($read_errfile =~ m/(fatal)\:\s(.*)/) {
             return 3
         } else {
             return 1;
@@ -214,8 +219,6 @@ sub repush_git {
     my ($self, $allconfig, $pkg_name, $rilis) = @_;
 
     # Get current Config :
-    my $build = $allconfig->{'build'};
-    my $build_rilis = $build->{'rilis'};
     my $pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $pkg->{'dirpkg'};
     my $git = $allconfig->{'git'};
@@ -229,15 +232,16 @@ sub repush_git {
     my $ext_err_log = $data_dev->{'log_ext_err'};
     my $dir_pkggroup = $pkg->{'pkgs'}->{$pkg_name}->{'group'};
     my $dirOfPkgs = $dir_pkgs.'/'.$dir_pkggroup.'/'.$pkg_name;
-    my $filename_outlogs = $prefix_log.$pkg_name.'_'.$build_rilis.$ext_out_log;
-    my $locfile_outlogs = $logs_dir.$build_rilis.'/'.$filename_outlogs;
-    my $filename_errlogs = $prefix_log.$pkg_name.'_'.$build_rilis.$ext_err_log;
-    my $locfile_errlogs = $logs_dir.$build_rilis.'/'.$filename_errlogs;
+    my $filename_outlogs = $prefix_log.$pkg_name.'_'.$rilis.$ext_out_log;
+    my $locfile_outlogs = $logs_dir.$rilis.'/'.$filename_outlogs;
+    my $filename_errlogs = $prefix_log.$pkg_name.'_'.$rilis.$ext_err_log;
+    my $locfile_errlogs = $logs_dir.$rilis.'/'.$filename_errlogs;
 
     # Remove file Logs :
     system("rm -rf ".$locfile_errlogs) if -e $locfile_errlogs;
     system("rm -rf ".$locfile_outlogs) if -e $locfile_outlogs;
 
+    # for Command Git :
     my $cmd_list = BlankOnDev::command::github();
     my $git_init = $cmd_list->{'git'}->{'init'};
     my $git_fetch = $cmd_list->{'git'}->{'fetch'};
@@ -312,5 +316,126 @@ sub repush_git {
             return 1;
         }
     }
+}
+# Subroutine for handle command git branch :
+# ------------------------------------------------------------------------
+sub cmd_git_check_branch {
+    my ($dirpkg_group, $cmd_gitpush) = @_;
+    my %data = ();
+    my $command = "cd $dirpkg_group; $cmd_gitpush";
+    my ($out, $err, $ret) = capture (
+        sub {
+            return system($command);
+        },
+    );
+#    print "OUTPUT : $out \n";
+#    print "OUTPUT  : $err \n";
+    $data{'out'} = $out;
+    $data{'err'} = $err;
+    return \%data;
+}
+# Subroutine for git check :
+# ------------------------------------------------------------------------
+sub git_check {
+    my ($self, $allconfig, $pkg_name) = @_;
+    my $data = '';
+
+    # Get current Config :
+    my $curr_build = $allconfig->{'build'};
+    my $build_rilis = $curr_build->{'rilis'};
+    my $pkg = $allconfig->{'pkg'};
+    my $dir_pkgs = $pkg->{'dirpkg'};
+    my $git = $allconfig->{'git'};
+    my $git_url = $git->{'url'};
+
+    # For Data Developer :
+    my $data_dev = BlankOnDev::DataDev::data_dev();
+    my $logs_dir = $data_dev->{'dirlogs'};
+    my $prefix_log = $data_dev->{'prefix_gitcheck_fllog'};
+    my $ext_out_log = $data_dev->{'log_ext_out'};
+    my $ext_err_log = $data_dev->{'log_ext_err'};
+    my $dir_pkggroup = $pkg->{'pkgs'}->{$pkg_name}->{'group'};
+    my $dirOfPkgs = $dir_pkgs.'/'.$dir_pkggroup.'/'.$pkg_name;
+    my $filename_outlogs = $prefix_log.$pkg_name.'_'.$build_rilis.$ext_out_log;
+    my $locfile_outlogs = $logs_dir.$build_rilis.'/'.$filename_outlogs;
+    my $filename_errlogs = $prefix_log.$pkg_name.'_'.$build_rilis.$ext_err_log;
+    my $locfile_errlogs = $logs_dir.$build_rilis.'/'.$filename_errlogs;
+
+    # Remove file Logs :
+    system("rm -rf ".$locfile_errlogs) if -e $locfile_errlogs;
+    system("rm -rf ".$locfile_outlogs) if -e $locfile_outlogs;
+
+    # for Command Git :
+    my $cmd_list = BlankOnDev::command::github();
+    my $git_init = $cmd_list->{'git'}->{'init'};
+    my $git_fetch = $cmd_list->{'git'}->{'fetch'};
+    my $git_merge = $cmd_list->{'git'}->{'merge'};
+    my $git_pull = $cmd_list->{'git'}->{'pull'};
+    my $git_resetHead = $cmd_list->{'git'}->{'reset-head'};
+    my $git_add = $cmd_list->{'git'}->{'add'};
+    my $git_remote = $cmd_list->{'git'}->{'remote'};
+    my $git_push = $cmd_list->{'git'}->{'push'};
+    my $git_push_force = $cmd_list->{'git'}->{'push-force'};
+    my $git_checkout = $cmd_list->{'git'}->{'checkout'};
+    my $git_push_repo = $cmd_list->{'git'}->{'push-repo'};
+    my $git_branch = $cmd_list->{'git'}->{'branch'};
+    my $cmd_git = '';
+    $cmd_git .= "$git_branch -a | grep remotes";
+
+    # Check branch list :
+    my $check_branch = cmd_git_check_branch($dirOfPkgs, $cmd_git);
+    my $out_cbranch = $check_branch->{'out'};
+    my $err_cbranch = $check_branch->{'err'};
+    if ($out_cbranch ne '') {
+        if ($out_cbranch =~ m/(remotes)\/(origin)/) {
+            my @data_out = BlankOnDev::Utils::Char->split_bchar($out_cbranch, "\n");
+            my @result_data = grep($_ =~ s/\s+remotes\/origin\///g, @data_out);
+            $data = 'repo_github = ';
+            my $size_data = scalar @result_data;
+            if ($size_data == 1) {
+                $cmd_git = "$git_branch -a";
+                $check_branch = cmd_git_check_branch($dirOfPkgs, $cmd_git);
+                $out_cbranch = $check_branch->{'out'};
+                @data_out = BlankOnDev::Utils::Char->split_bchar($out_cbranch, "\n");
+                @data_out = grep(!/remotes/, @data_out);
+                @data_out = grep($_ =~ s/[\*\s+]//g, @data_out);
+                my $size_data_out = scalar @data_out;
+                while (my ($key, $value) = each @data_out) {
+                    if ($key eq ($size_data_out - 1)) {
+                        $data .= "$data_out[$key]";
+                    } else {
+                        $data .= "$data_out[$key], ";
+                    }
+                }
+            } else {
+                while (my ($key, $value) = each @result_data) {
+                    if ($key eq ($size_data - 1)) {
+                        $data .= "$result_data[$key]";
+                    } else {
+                        $data .= "$result_data[$key], ";
+                    }
+                }
+            }
+        } else {
+            if ($err_cbranch =~ m/(remotes)\/(origin)/) {
+                my @data_out = BlankOnDev::Utils::Char->split_bchar($out_cbranch, "\n");
+                my @result_data = grep($_ =~ s/\s+remotes\/origin\///g, @data_out);
+                $data = 'repo_github = ';
+                my $size_data = scalar @result_data;
+                while (my ($key, $value) = each @result_data) {
+                    if ($key eq ($size_data - 1)) {
+                        $data .= "$result_data[$key]";
+                    } else {
+                        $data .= "$result_data[$key], ";
+                    }
+                }
+            } else {
+                $data = 'undefined';
+            }
+        }
+    } else {
+        $data = 'undefined';
+    }
+    return $data;
 }
 1;
