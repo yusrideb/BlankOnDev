@@ -25,7 +25,6 @@ our $VERSION = '0.1004';
 sub action_bzr2git {
     my ($self, $allconfig) = @_;
 
-
 }
 # Subroutine for option "bzr2git" :
 # ------------------------------------------------------------------------
