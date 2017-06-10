@@ -166,10 +166,9 @@ sub usage_bzr2git {
     printf("  %-20s %s\n", "list-pkg-group", "Untuk melihat daftar group paket yang sudah terdaftar dalam system aplikasi.");
     printf("  %-20s %s\n", "search-pkg", "untuk mencari data paket yang terdaftar pada system aplikasi");
     printf("  %-20s %s\n", "branch", "Untuk branch dari repo bazaar berdasarkan list paket yang tersimpan pada system aplikasi");
-    printf("  %-20s %s\n", "bzr-cvr", "Untuk convert repository bazaar ke github repository");
+    printf("  %-20s %s\n", "bzr-cgit", "Untuk convert repository bazaar ke github repository");
     printf("  %-20s %s\n", "git-push", "Untuk push ke git berdasarkan semua list paket yang tersimpan pada system aplikasi atau hanya 1 paket saja.");
     printf("  %-20s %s\n", "git-push-new", "Untuk push ke git tanpa convert dari Bazaar");
-    printf("  %-20s %s\n", "git-push-repo", "Untuk push ke git sesuai dengan repo yang diinput");
     printf("  %-20s %s\n", "git_check", "Untuk mengecek repo di github, beserta informasi branch yang tersedia");
     printf("  %-20s %s\n", "re-branch", "Untuk branch paket yang ada pada bazaar server");
     printf("  %-20s %s\n", "re-gitpush", "Untuk Deploy ulang ke github");
@@ -192,37 +191,68 @@ sub usage_bzr2git_addpkgfile {
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git addpkg-file\".");
 }
 sub usage_bzr2git_listpkg {
-    printf("  %-20s %s\n", "[group_name]", "Nama group paket yang tersimpan dalam system.");
+    printf("  %-20s %s\n", "[group_name]", "berisi nama group paket yang tersimpan dalam system.");
     printf("  %-20s %s\n", "all", "Untuk melihat daftar semua paket yang tersimpan dalam system.");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git list-pkg\".");
 }
 sub usage_bzr2git_renamepkg_group {
-    printf("  %-20s %s\n", "[name_of_group_packages]", "Nama paket group yang akan diubah");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama paket group yang akan diubah");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git rename-pkg-group\".");
 }
 sub usage_bzr2git_removepkg_group {
-    printf("  %-20s %s\n", "[name_of_group_packages]", "Nama group paket yang akan dihapus, kemudian di rename");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket yang akan dihapus, kemudian di rename");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git remove-pkg-group\".");
 }
 sub usage_bzr2git_removepkg {
-    printf("  %-20s %s\n", "[name_packages]", "Nama paket yang akan dihapus dari system aplikasi.");
-    printf("  %-20s %s\n", "[name_of_group_packages]", "Menghapus paket dari system aplikasi berdasarkan nama group paket");
+    printf("  %-20s %s\n", "[name_packages]", "berisi nama paket yang akan dihapus dari system aplikasi.");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "untuk menghapus paket dari system aplikasi berdasarkan nama group paket");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git remove-pkg\".");
 }
 sub usage_bzr2git_searchpkg {
-    printf("  %-20s %s\n", "[name_of_packages]", "Nama paket yang akan dicari.");
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan dicari.");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git search-pkg\".");
 }
 sub usage_bzr2git_branch {
-    printf("  %-20s %s\n", "[name_of_packages]", "Nama paket yang akan didownload melalui \"bzr branch\".");
-    printf("  %-20s %s\n", "[name_of_group_packages]", "nama group paket untuk mengdownload semua paket yang terkait dengan group melalui \"bzr branch\".");
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan didownload melalui \"bzr branch\".");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk mengdownload semua paket yang terkait dengan group melalui \"bzr branch\".");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git search-pkg\".");
 }
 sub usage_bzr2git_bzr_cgit {
-    printf("  %-20s %s\n", "[name_of_packages]", "Nama paket yang akan dikonversi ke repo github");
-    printf("  %-20s %s\n", "[name_of_group_packages]", "Nama group paket untuk meng-konversi semua paket yang terkait dengan group");
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan dikonversi ke repo github");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk meng-konversi semua paket yang terkait dengan group");
     printf("  %-20s %s\n", "", "ke format repositori github");
-    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git search-pkg\".");
+    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git bzr-cgit\".");
+}
+sub usage_bzr2git_gitpush {
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan di dorong ke github");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk mendorong semua paket yang terkait dengan group");
+    printf("  %-20s %s\n", "", "ke repositori github");
+    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git git-push\".");
+}
+sub usage_bzr2git_gitpush_new {
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan di dorong ke github tanpa konveri dari format bazaar ke github");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk mendorong semua paket yang terkait dengan group");
+    printf("  %-20s %s\n", "", "ke repositori github tanpa konveri dari format bazaar ke github");
+    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git git-push\".");
+}
+sub usage_bzr2git_gitpush_check {
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan dicek dalam repositori github");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk mengecek semua paket yang terkait dengan group");
+    printf("  %-20s %s\n", "", "yang berada dalam repositori github.");
+    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git git-push\".");
+}
+sub usage_bzr2git_reBranch {
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan dibranch ulang dari server repositori bazaar");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk branch ulang semua paket yang terkait dengan group");
+    printf("  %-20s %s\n", "", "yang berada dalam repositori bazaar.");
+    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git git-push\".");
+}
+sub usage_bzr2git_reGitpush {
+    printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan dorong ulang ke github, ");
+    printf("  %-20s %s\n", "", "untuk dilakukan perbaikan terhadap proses push yang salah");
+    printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk mendorong ulang semua paket yang terkait dengan group");
+    printf("  %-20s %s\n", "", "ke repositori github, untuk dilakukan perbaikan terhadap proses push yang salah");
+    printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git git-push\".");
 }
 
 # For Help in list pkg :
