@@ -727,14 +727,10 @@ sub git_config {
 # ------------------------------------------------------------------------
 sub read_gen_cfg {
     my $data = '';
-    my %data_pkg = ();
     my $data_setup = data_setup();
     my $dir_dev = $data_setup->{'dir_dev'};
-    my $prefix_file_cfg = $data_setup->{'prefix_flcfg'};
     my $ext_flcfg = $data_setup->{'fileCfg_ext'};
-    my $home_dir = $ENV{"HOME"};
-    my $pkgs_dir = $data_setup->{'dir_pkg'};
-    my $logs_dir = $data_setup->{'dirlogs'};
+    my $tmp_dir = $data_setup->{'dir_tmp'};
 
     # For General Configure :
     my $file_name = 'general'.$ext_flcfg;
@@ -742,6 +738,11 @@ sub read_gen_cfg {
 
     # For format config :
     my $format_config = format_general_config();
+
+    # For Dir Temp
+    unless (-d $tmp_dir) {
+        mkdir($tmp_dir);
+    }
 
     # Check Dir config :
     if (-d $dir_dev) {
