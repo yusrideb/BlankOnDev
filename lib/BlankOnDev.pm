@@ -169,7 +169,7 @@ sub usage_bzr2git {
     printf("  %-20s %s\n", "bzr-cgit", "Untuk convert repository bazaar ke github repository");
     printf("  %-20s %s\n", "git-push", "Untuk push ke git berdasarkan semua list paket yang tersimpan pada system aplikasi atau hanya 1 paket saja.");
     printf("  %-20s %s\n", "git-push-new", "Untuk push ke git tanpa convert dari Bazaar");
-    printf("  %-20s %s\n", "git_check", "Untuk mengecek repo di github, beserta informasi branch yang tersedia");
+    printf("  %-20s %s\n", "git-check", "Untuk mengecek repo di github, beserta informasi branch yang tersedia");
     printf("  %-20s %s\n", "re-branch", "Untuk branch paket yang ada pada bazaar server");
     printf("  %-20s %s\n", "re-gitpush", "Untuk Deploy ulang ke github");
 #    printf("  %-20s %s\n", "", "");
@@ -235,7 +235,7 @@ sub usage_bzr2git_gitpush_new {
     printf("  %-20s %s\n", "", "ke repositori github tanpa konveri dari format bazaar ke github");
     printf("  %-20s %s\n", "help", "Berisi help penggunaan command \"boidev bzr2git git-push\".");
 }
-sub usage_bzr2git_gitpush_check {
+sub usage_bzr2git_git_check {
     printf("  %-20s %s\n", "[name_of_packages]", "berisi nama paket yang akan dicek dalam repositori github");
     printf("  %-20s %s\n", "[name_of_group_packages]", "berisi nama group paket untuk mengecek semua paket yang terkait dengan group");
     printf("  %-20s %s\n", "", "yang berada dalam repositori github.");
