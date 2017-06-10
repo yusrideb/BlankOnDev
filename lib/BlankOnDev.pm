@@ -146,7 +146,7 @@ sub usage {
     usage_bzr2git_branch();
     print "\n";
 
-    print "For USAGE : boidev bzr2git bzr-cgits <INPUT> \n";
+    print "For USAGE : boidev bzr2git bzr-cgit <INPUT> \n";
     print "---------" x 11 . "\n";
     usage_bzr2git_bzr_cgit();
     print "\n";
