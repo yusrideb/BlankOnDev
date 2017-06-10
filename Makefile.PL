@@ -24,9 +24,7 @@ WriteMakefile(
     "NAME" => "BlankOnDev",
     "PREREQ_PM" => {
         "Crypt::Blowfish" => 0,
-        "Digest::SHA1" => 0,
         "Digest::MD5" => 0,
-        "List::Util" => 0,
         "MIME::Base64" => 0,
         "MIME::Base64::Perl" => 0,
         "JSON" => 0,
