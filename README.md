@@ -8,6 +8,30 @@ beberapa aktifitas yang terkait dengan pengembangan BlankOn.
 Untuk petunjuk penggunaan dapat Anda lihat di 
 [BlankOnDev::Tutorial::id](https://metacpan.org/pod/distribution/BlankOnDev/lib/BlankOnDev/Tutorial/id.pod).
 
+# HOW TO INSTALL
+
+Untuk melakukan instalasi dapat dilakukan dengan cara manual
+atau install melalui CPAN.
+
+## Manual Install
+
+### Install dependensi :
+    
+    cpan -i Crypt::Blowfish Digest::MD5 MIME::Base64 MIME::Base64::Perl JSON GnuPG Hash::MultiValue
+    cpan -i Term::ReadKey LWP::UserAgent DateTime Text::SimpleTable::AutoWidth
+    cpan -i Capture::Tiny Capture::Tiny::Extended UNIVERSAL::ref parent
+
+### Install Paket :
+    
+    perl Makefile.PL
+    make
+    make test
+    make install
+    make clean
+
+## Automatic Install (Install from CPAN) :
+    cpan -i BlankOnDev
+
 # MODULE AND UTILITIES
 
 ## BlankOnDev::config
