@@ -16,6 +16,7 @@ WriteMakefile(
     },
     "DISTNAME" => "BlankOnDev",
     "EXE_FILES" => [
+        "script/perlmake",
         "script/boi_mig.sh",
         "script/boidev"
     ],
