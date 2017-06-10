@@ -12,7 +12,6 @@ use BlankOnDev::DateTime;
 use BlankOnDev::Utils::file;
 use BlankOnDev::DataDev;
 use BlankOnDev::HTTP::request;
-#use BlankOnDev::Migration::bazaar2GitHub::tmp_cfg;
 use BlankOnDev::Migration::bazaar2GitHub::bazaar;
 use BlankOnDev::Migration::bazaar2GitHub::github;
 use Text::SimpleTable::AutoWidth;
@@ -25,6 +24,8 @@ our $VERSION = '0.1004';
 sub action_bzr2git {
     my ($self, $allconfig) = @_;
 
+    # Form action migration :
+    print "";
 }
 # Subroutine for option "bzr2git" :
 # ------------------------------------------------------------------------
@@ -4325,6 +4326,90 @@ sub usage_arg_3 {
             print "-- or --\n";
             print "USAGE : boidev bzr2git branch <INPUT>\n\n";
             BlankOnDev::usage_bzr2git_branch();
+            print "\n";
+            exit 0;
+        },
+        'bzr-cgit' => sub {
+            print "\n";
+            print "-----" x 15 . "\n";
+            print " For Help Command : boidev $ARGV[0] $ARGV[1] \n";
+            print "-----" x 15 . "\n";
+            print "\n";
+
+            print "USAGE : boidev bzr2git bzr-cgit <OPTIONS3>\n";
+            print "-- or --\n";
+            print "USAGE : boidev bzr2git bzr-cgit <INPUT>\n\n";
+            BlankOnDev::usage_bzr2git_bzr_cgit();
+            print "\n";
+            exit 0;
+        },
+        'git-push' => sub {
+            print "\n";
+            print "-----" x 15 . "\n";
+            print " For Help Command : boidev $ARGV[0] $ARGV[1] \n";
+            print "-----" x 15 . "\n";
+            print "\n";
+
+            print "USAGE : boidev bzr2git git-push <OPTIONS3>\n";
+            print "-- or --\n";
+            print "USAGE : boidev bzr2git git-push <INPUT>\n\n";
+            BlankOnDev::usage_bzr2git_gitpush();
+            print "\n";
+            exit 0;
+        },
+        'git-push-new' => sub {
+            print "\n";
+            print "-----" x 15 . "\n";
+            print " For Help Command : boidev $ARGV[0] $ARGV[1] \n";
+            print "-----" x 15 . "\n";
+            print "\n";
+
+            print "USAGE : boidev bzr2git git-push-new <OPTIONS3>\n";
+            print "-- or --\n";
+            print "USAGE : boidev bzr2git git-push-new <INPUT>\n\n";
+            BlankOnDev::usage_bzr2git_gitpush_new();
+            print "\n";
+            exit 0;
+        },
+        'git-check' => sub {
+            print "\n";
+            print "-----" x 15 . "\n";
+            print " For Help Command : boidev $ARGV[0] $ARGV[1] \n";
+            print "-----" x 15 . "\n";
+            print "\n";
+
+            print "USAGE : boidev bzr2git git-check <OPTIONS3>\n";
+            print "-- or --\n";
+            print "USAGE : boidev bzr2git git-check <INPUT>\n\n";
+            BlankOnDev::usage_bzr2git_git_check();
+            print "\n";
+            exit 0;
+        },
+        're-branch' => sub {
+            print "\n";
+            print "-----" x 15 . "\n";
+            print " For Help Command : boidev $ARGV[0] $ARGV[1] \n";
+            print "-----" x 15 . "\n";
+            print "\n";
+
+            print "USAGE : boidev bzr2git re-branch <OPTIONS3>\n";
+            print "-- or --\n";
+            print "USAGE : boidev bzr2git re-branch <INPUT>\n\n";
+            BlankOnDev::usage_bzr2git_reBranch();
+            print "\n";
+            exit 0;
+        },
+        're-gitpush' => sub {
+            print "\n";
+            print "-----" x 15 . "\n";
+            print " For Help Command : boidev $ARGV[0] $ARGV[1] \n";
+            print "-----" x 15 . "\n";
+            print "\n";
+
+            print "USAGE : boidev bzr2git re-branch <OPTIONS3>\n";
+            print "-- or --\n";
+            print "USAGE : boidev bzr2git re-branch <INPUT>\n\n";
+            BlankOnDev::usage_bzr2git_reGitpush();
             print "\n";
             exit 0;
         }
