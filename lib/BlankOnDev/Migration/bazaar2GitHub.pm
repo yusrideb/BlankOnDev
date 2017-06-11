@@ -740,8 +740,6 @@ sub _addpkg_group {
 
             # Check Group Name :
             my $check_group = $self->check_exists_group('check', $curr_pkg->{'group'}, $new_grp);
-            print "Resutl Check : \n";
-            print Dumper $check_group;
             if ($check_group->{'result'} == 1) {
                 my $locdir_pkg = $dir_dev.$dir_pkgs;
                 my $locdir_rilis = $locdir_pkg.'/'.$build_rilis;
@@ -755,8 +753,6 @@ sub _addpkg_group {
                 # Prepare Config ;
                 my $save_config = prepare_config();
                 my $result_addgrp = $save_config->{'add-group'}($allconfig, $new_grp);
-
-                #            print Dumper $result_addgrp;
 
                 # Save Configure :
                 unless (exists $curr_pkg->{'group'}->{$new_grp}) {
@@ -804,8 +800,6 @@ sub _addpkg_group {
             my $save_config = prepare_config();
             my $result_addgrp = $save_config->{'add-group'}($allconfig, $new_grp);
 
-            #            print Dumper $result_addgrp;
-
             # Save Configure :
             unless (exists $curr_pkg->{'group'}->{$new_grp}) {
                 my $for_saveCfg = save_newConfig();
@@ -835,7 +829,6 @@ sub _addpkg_group {
                 $arguments .= $ARGV[$i].' ';
             }
         }
-        print Dumper \@ARGV;
         print "\n";
         print "====" x 18 . "\n";
         print "your command: boidev $arguments\n";
@@ -1547,8 +1540,6 @@ sub _addpkg {
                             });
                         my $for_saveCfg;
 
-                        #                print Dumper $rdt_config;
-
                         # Add list pkgs :
                         unless (exists $curr_data_pkg->{'group'}->{$input_group} && exists $curr_data_pkg->{'pkgs'}->{$new_pkg}) {
                             $for_saveCfg = save_newConfig();
@@ -1776,8 +1767,6 @@ sub _addpkg_file {
                             print "$new_pkg is exists. \n";
                         }
 
-#                        print Dumper $rdt_config;
-
                         my $for_saveCfg;
                         unless (exists $curr_data_pkg->{'group'}->{$input_group} && exists $curr_data_pkg->{'pkgs'}->{$lines}) {
                             $for_saveCfg = save_newConfig();
@@ -1807,7 +1796,6 @@ sub _addpkg_file {
                             });
                         my $for_saveCfg;
                         print "$lines\n";
-#                        print Dumper $rdt_config;
 #
                         unless (exists $curr_data_pkg->{'group'}->{$input_group} && exists $curr_data_pkg->{'pkgs'}->{$lines}) {
                             $for_saveCfg = save_newConfig();
@@ -2220,7 +2208,6 @@ sub _list_pkg {
 
             # Check if $ARGV[2] == 'all' :
             if ($ARGV[2] eq 'all') {
-                print Dumper $allconfig;
                 my $list_all_pkggroup = $self->list_all_pkg_group($allconfig);
                 my @list_allpkg_group = @{$list_all_pkggroup->{'data'}};
 
@@ -2303,7 +2290,6 @@ sub _list_pkg {
                     # Create Text Table :
                     my $textTbl = Text::SimpleTable::AutoWidth->new(captions => [( '#', 'Group Name', 'Packages Name', 'Date Add', 'Date bzr branch', 'Date git push', 'status', 'on GitHub')]);
 
-#                    print Dumper \@list_pkgs;
                     my $i = 0;
                     my $size_list = scalar keys(@list_pkgs);
                     while ($i < $size_list) {
@@ -2607,8 +2593,6 @@ sub _search_pkg {
             # Create Text Table :
             my $textTbl = Text::SimpleTable::AutoWidth->new(captions => [( '#', 'Group Name', 'Packages Name', 'Date Add', 'Date bzr branch', 'Date git push', 'status')]);
 
-#            print Dumper \@list_pkgs;
-
             my $i = 0;
             my $size_list = scalar keys(@list_pkgs);
             while ($i < $size_list) {
@@ -2667,9 +2651,6 @@ sub _search_pkg {
 
             # Create Text Table :
             my $textTbl = Text::SimpleTable::AutoWidth->new(captions => [( '#', 'Group Name', 'Packages Name', 'Date Add', 'Date bzr branch', 'Date git push', 'status')]);
-
-            #            print Dumper \@list_pkgs;
-
             my $i = 0;
             my $size_list = scalar keys(@list_pkgs);
             while ($i < $size_list) {
