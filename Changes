@@ -44,10 +44,14 @@ Revision history for Perl extension BlankOnDev.
     - fix file lib/BlankOnDev/Migration/bazaar2GitHub/github.pm
     - fix format file lib/BlankOnDev/Tutorial/id.pod
     - fix file Makefile.PL
-    - fix file BlankOnDev/config.pm
-    - fix file BlankOnDev/enkripsi.pm
-    - fix file BlankOnDev/config/save.pm
+    - fix file lib/BlankOnDev/config.pm
+    - fix file lib/BlankOnDev/enkripsi.pm
+    - fix file lib/BlankOnDev/config/save.pm
+    - fix file lib/BlankOnDev/DateTime.pm
+    - fix timezone form.
+    - add and fix file lib/BlankOnDev/system.pm
     - fork module from CellBash::Utils::Char
     - add function command "boidev bzr2git list-pkg all"
     - command "boidev prepare" change to "boidev bzr2git prepare".
     - add function command "boidev rilis"
+    - check and kill process on all command "boidev".
