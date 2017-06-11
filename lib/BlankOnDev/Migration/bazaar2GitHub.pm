@@ -19,6 +19,253 @@ use Text::SimpleTable::AutoWidth;
 # Version :
 our $VERSION = '0.1004';
 
+# Subroutine for get time :
+# ------------------------------------------------------------------------
+sub get_DateTime {
+    my ($self, $allconfig) = @_;
+
+    # Get data current config :
+    my $curr_timezone = $allconfig->{'timezone'};
+    my $timestamp = time();
+    my $get_dataTime = BlankOnDev::DateTime->get($curr_timezone, $timestamp, {
+            'date' => '-',
+            'time' => ':',
+            'datetime' => ' ',
+            'format' => 'DD-MM-YYYY hms'
+        });
+    my $result = $get_dataTime->{'custom'};
+    return $result;
+}
+# Subroutine for action re migration :
+# ------------------------------------------------------------------------
+sub action_re_migration {
+    my ($self, $allconfig, $pkg_name, $pkg_group, $tmp_pkg, $time_branch) = @_;
+
+    # Define hash or scalar :
+    my %data = ();
+    my $action_branch;
+    my $action_bzrCgit;
+    my $action_re_gtipush;
+    my $action_check;
+    my $time_gitpush;
+
+    # Get data current config :
+    my $curr_pkg = $allconfig->{'pkg'};
+    my $dirpkg = $curr_pkg->{'dirpkg'};
+    my $list_pkg = $curr_pkg->{'pkgs'};
+    my $locdir_pkg = $dirpkg.'/'.$pkg_group.'/'.$pkg_name;
+
+    system("rm -rf $locdir_pkg");
+    system("mv -f $tmp_pkg $locdir_pkg");
+    $action_bzrCgit = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_bzr_cgit($allconfig, $pkg_name);
+    if ($action_bzrCgit eq 1) {
+        print "[success] re-Action \"bzr convert git -> $pkg_name\" $action_bzrCgit\n";
+        $action_re_gtipush = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_reGitpush($allconfig, $pkg_name);
+        if ($action_re_gtipush eq 1) {
+            $time_gitpush = $self->get_DateTime($allconfig);
+            print "[success] Action \"re-git push -> $pkg_name\" \n";
+            $action_check = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_git_check($allconfig, $pkg_name);
+            if ($action_check ne 'undef') {
+                print "[success] Action \"git check -> $pkg_name\" $action_check\n";
+            } else {
+                print "[error] Action \"git check -> $pkg_name\" $action_check\n";
+            }
+        } else {
+            print "[error] Action \"re-git push -> $pkg_name\" | $action_branch\n";
+        }
+    } else {
+        print "[error] Action \"bzr convert git -> $pkg_name\" | $action_branch\n";
+    }
+
+    # Prepare Configure :
+    my $prepare_config = prepare_config();
+    my $result_cfg = $prepare_config->{'bzr2git'}($allconfig, $pkg_name, $action_branch, $action_bzrCgit, $action_re_gtipush, $action_check, $time_branch, $time_gitpush);
+
+    # Place :
+    $data{'bzr-cgit'} = $action_bzrCgit;
+    $data{'git-push'} = $action_re_gtipush;
+    $data{'git-check'} = $action_check;
+    $data{'result-cfg'} = $result_cfg;
+    return \%data;
+}
+# Subroutine for action migration :
+# ------------------------------------------------------------------------
+sub bzr2git_action_migration {
+    my ($self, $allconfig, $list_pkg) = @_;
+
+    # Define scalar :
+    my $action_branch;
+    my $action_bzrCgit;
+    my $action_gitpush;
+    my $action_check;
+    my $time_branch;
+    my $time_gitpush;
+
+    # Get data current config :
+    my $curr_timezone = $allconfig->{'timezone'};
+    my $curr_pkg = $allconfig->{'pkg'};
+    my $dirpkg = $curr_pkg->{'dirpkg'};
+
+    # For Data Developer :
+    my $data_dev = BlankOnDev::DataDev::data_dev();
+    my $dir_tmp = $data_dev->{'dir_tmp'};
+
+    # For List Packages :
+    my @list_packages = @{$list_pkg};
+
+    # While loop to migration packages :
+    my $i_p = 0;
+    my $until_p = scalar @list_packages;
+    my $pkg_name;
+    my $pkg_group;
+    my $result_cfg = $allconfig;
+    my $timestamp;
+    my $get_dataTime;
+    while ($i_p < $until_p) {
+        $pkg_name = $list_packages[$i_p]->{'name'};
+        $pkg_group = $list_packages[$i_p]->{'group'};
+
+        my $locdir_pkg = $dirpkg.'/'.$pkg_group.'/'.$pkg_name;
+        my $locdir_tmp_pkg = $dir_tmp.$pkg_group.'_'.$pkg_name;
+
+        $action_branch = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_branch($allconfig, $pkg_name, $pkg_group);
+        if ($action_branch eq 1) {
+            $time_branch = $self->get_DateTime($allconfig);
+            system("cp -rf $locdir_pkg $locdir_tmp_pkg");
+            print "[success] Action \"bzr branch -> $pkg_name\" : $action_branch\n";
+            $action_bzrCgit = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_bzr_cgit($allconfig, $pkg_name);
+            if ($action_bzrCgit eq 1) {
+                print "[success] Action \"bzr convert git -> $pkg_name\" $action_bzrCgit\n";
+                $action_gitpush = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_gitpush($allconfig, $pkg_name);
+                if ($action_gitpush eq 1) {
+                    $time_gitpush = $self->get_DateTime($allconfig);
+                    print "[success] Action \"git push -> $pkg_name\" $action_gitpush\n";
+                    $action_check = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_git_check($allconfig, $pkg_name);
+                    if ($action_check ne 'undef') {
+                        print "[success] Action \"git check -> $pkg_name\" $action_check\n";
+                    } else {
+                        print "[error] Action \"git check -> $pkg_name\" $action_check\n";
+                    }
+                } else {
+                    # Re migration :
+                    my $action_reMig = $self->action_re_migration($result_cfg, $pkg_name, $pkg_group, $locdir_tmp_pkg, $time_branch);
+                    $action_bzrCgit = $action_reMig->{'bzr-cgit'};
+                    $action_gitpush = $action_reMig->{'git-push'};
+                    $action_check = $action_reMig->{'git-check'};
+                    $result_cfg = $action_reMig->{'result-cfg'};
+                }
+            } else {
+                print "[error] Action \"bzr convert git -> $pkg_name\" | $action_branch\n";
+            }
+        } else {
+            print "[error] Action \"bzr branch -> $pkg_name\" | $action_branch\n";
+        }
+        print "----" x 18 . "\n";
+
+        # Prepare Configure :
+        my $prepare_config = prepare_config();
+        $result_cfg = $prepare_config->{'bzr2git'}($result_cfg, $pkg_name, $action_branch, $action_bzrCgit, $action_gitpush, $action_check, $time_branch, $time_gitpush);
+        $i_p++;
+    }
+
+    # Save configure :
+    my $saveConfig = save_newConfig();
+    $saveConfig->{'bzr2git'}($result_cfg);
+}
+# Subroutine for action migration one package  :
+# ------------------------------------------------------------------------
+sub action_bzr2git_single {
+    my ($self, $allconfig) = @_;
+
+    # Define scalar :
+    my $pkg_name;
+    my $action_branch;
+    my $action_bzrCgit;
+    my $action_gitpush;
+    my $action_check;
+    my $time_branch;
+    my $time_gitpush;
+
+    # For All config :
+    my $curr_pkg = $allconfig->{'pkg'};
+    my $dirpkg = $curr_pkg->{'dirpkg'};
+    my $pkg_list = $curr_pkg->{'pkgs'};
+
+    # For Data Developer :
+    my $data_dev = BlankOnDev::DataDev::data_dev();
+    my $dir_tmp = $data_dev->{'dir_tmp'};
+
+    # Form enter packages name ;
+    print "\n";
+    print "Enter packages name : ";
+    chomp($pkg_name = <STDIN>);
+    if ($pkg_name ne '') {
+        print "\n";
+        # Check Input Packages :
+        if (exists $pkg_list->{$pkg_name}) {
+            my $pkg_group = $pkg_list->{$pkg_name}->{'group'};
+
+            my $locdir_pkg = $dirpkg.'/'.$pkg_group.'/'.$pkg_name;
+            my $locdir_tmp_pkg = $dir_tmp.$pkg_group.'_'.$pkg_name;
+            my $result_cfg = $allconfig;
+
+            $action_branch = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_branch($allconfig, $pkg_name, $pkg_group);
+            if ($action_branch eq 1) {
+                $time_branch = $self->get_DateTime($allconfig);
+                system("cp -rf $locdir_pkg $locdir_tmp_pkg");
+                print "[success] Action \"bzr branch -> $pkg_name\" : $action_branch\n";
+                $action_bzrCgit = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_bzr_cgit($allconfig, $pkg_name);
+                if ($action_bzrCgit eq 1) {
+                    print "[success] Action \"bzr convert git -> $pkg_name\" $action_bzrCgit\n";
+                    $action_gitpush = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_gitpush($allconfig, $pkg_name);
+                    if ($action_gitpush eq 1) {
+                        $time_gitpush = $self->get_DateTime($allconfig);
+                        print "[success] Action \"git push -> $pkg_name\" $action_gitpush\n";
+                        $action_check = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_git_check($allconfig, $pkg_name);
+                        if ($action_check ne 'undef') {
+                            print "[success] Action \"git check -> $pkg_name\" $action_check\n";
+                        } else {
+                            print "[error] Action \"git check -> $pkg_name\" $action_check\n";
+                        }
+                    } else {
+                        # Re migration :
+                        my $action_reMig = $self->action_re_migration($result_cfg, $pkg_name, $pkg_group, $locdir_tmp_pkg);
+                        $action_bzrCgit = $action_reMig->{'bzr-cgit'};
+                        $action_gitpush = $action_reMig->{'git-push'};
+                        $action_check = $action_reMig->{'git-check'};
+                        $result_cfg = $action_reMig->{'result-cfg'};
+                    }
+                } else {
+                    print "[error] Action \"bzr convert git -> $pkg_name\" | $action_branch\n";
+                }
+            } else {
+                print "[error] Action \"bzr branch -> $pkg_name\" | $action_branch\n";
+            }
+
+            # Prepare Configure :
+            my $prepare_config = prepare_config();
+            $result_cfg = $prepare_config->{'bzr2git'}($allconfig, $pkg_name, $action_branch, $action_bzrCgit, $action_gitpush, $action_check, $time_branch, $time_gitpush);
+
+            # Save configure :
+            my $saveConfig = save_newConfig();
+            $saveConfig->{'bzr2git'}($result_cfg);
+            print "\n";
+            print "====" x 5 . " Migration packages \"$pkg_name\" has been finished ";
+            print "====" x 5 . "\n\n";
+        } else {
+            print "\n";
+            print "Warning : \n";
+            print "====" x 18 . "\n";
+            print "Packages \"$pkg_name\" is not exists...\n";
+        }
+    } else {
+        print "\n";
+        print "Info : \n";
+        print "====" x 18 . "\n";
+        print "Please Enter name package for Migration !!!\n";
+        exit 0;
+    }
+}
 # Subroutine for get amount of packages on group :
 # ------------------------------------------------------------------------
 sub amount_pkg {
@@ -95,51 +342,6 @@ sub bzr2git_get_list_group_amount_pkg {
         exit 0;
     }
 }
-# Subroutine for action re migration :
-# ------------------------------------------------------------------------
-sub action_re_migration {
-    my ($self, $allconfig, $pkg_name, $pkg_group, $tmp_pkg) = @_;
-
-    # Define hash or scalar :
-    my %data = ();
-    my $action_branch;
-    my $action_bzrCgit;
-    my $action_re_gtipush;
-    my $action_check;
-
-    # Get data current config :
-    my $curr_pkg = $allconfig->{'pkg'};
-    my $dirpkg = $curr_pkg->{'dirpkg'};
-    my $list_pkg = $curr_pkg->{'pkgs'};
-    my $locdir_pkg = $dirpkg.'/'.$pkg_group.'/'.$pkg_name;
-
-    system("rm -rf $locdir_pkg");
-    system("mv -f $tmp_pkg $locdir_pkg");
-    $action_bzrCgit = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_bzr_cgit($allconfig, $pkg_name);
-    if ($action_bzrCgit eq 1) {
-        print "[success] re-Action \"bzr convert git -> $pkg_name\" $action_bzrCgit\n";
-        $action_re_gtipush = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_reGitpush($allconfig, $pkg_name);
-        if ($action_re_gtipush eq 1) {
-            print "[success] Action \"re-git push -> $pkg_name\" \n";
-            $action_check = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_git_check($allconfig, $pkg_name);
-            if ($action_check ne 'undef') {
-                print "[success] Action \"git check -> $pkg_name\" $action_check\n";
-            } else {
-                print "[error] Action \"git check -> $pkg_name\" $action_check\n";
-            }
-        } else {
-            print "[error] Action \"re-git push -> $pkg_name\" | $action_branch\n";
-        }
-    } else {
-        print "[error] Action \"bzr convert git -> $pkg_name\" | $action_branch\n";
-    }
-
-    # Place :
-    $data{'bzr-cgit'} = $action_bzrCgit;
-    $data{'git-push'} = $action_re_gtipush;
-    $data{'git-check'} = $action_check;
-    return \%data;
-}
 # Subroutine for action migration by group :
 # ------------------------------------------------------------------------
 sub action_bzr2git2 {
@@ -147,11 +349,9 @@ sub action_bzr2git2 {
 
     # Define scalar :
     my $form_group;
-    my $name_group;
     my $action_branch;
     my $action_bzrCgit;
     my $action_gitpush;
-    my $action_re_gtipush;
     my $action_check;
 
     # Get data current config :
@@ -184,46 +384,12 @@ sub action_bzr2git2 {
             print "\n";
             print "Doing migration ...\n\n";
 
-            # While loop for action :
-            my $i = 0;
-            my $until = scalar @list_all_pkg;
-            while ($i < $until) {
-                my $pkg_name = $list_all_pkg[$i]->{'name'};
-                my $pkg_group = $list_all_pkg[$i]->{'group'};
-                my $locdir_pkg = $dirpkg.'/'.$pkg_group.'/'.$pkg_name;
-                my $locdir_tmp_pkg = $dir_tmp.$pkg_group.'_'.$pkg_name;
+            # Action Migration :
+            $self->bzr2git_action_migration($allconfig, \@list_all_pkg);
 
-                $action_branch = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_branch($allconfig, $pkg_name, $pkg_group);
-                if ($action_branch eq 1) {
-                    system("cp -rf $locdir_pkg $locdir_tmp_pkg");
-                    print "[success] Action \"bzr branch -> $pkg_name\" : $action_branch\n";
-                    $action_bzrCgit = BlankOnDev::Migration::bazaar2GitHub::bazaar->bzr2git_bzr_cgit($allconfig, $pkg_name);
-                    if ($action_bzrCgit eq 1) {
-                        print "[success] Action \"bzr convert git -> $pkg_name\" $action_bzrCgit\n";
-                        $action_gitpush = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_gitpush($allconfig, $pkg_name);
-                        if ($action_gitpush eq 1) {
-                            print "[success] Action \"git push -> $pkg_name\" $action_gitpush\n";
-                            $action_check = BlankOnDev::Migration::bazaar2GitHub::github->bzr2git_git_check($allconfig, $pkg_name);
-                            if ($action_check ne 'undef') {
-                                print "[success] Action \"git check -> $pkg_name\" $action_check\n";
-                            } else {
-                                print "[error] Action \"git check -> $pkg_name\" $action_check\n";
-                            }
-                        } else {
-                            # Re migration :
-                            my $action_reMig = $self->action_re_migration($allconfig, $pkg_name, $pkg_group, $locdir_tmp_pkg);
-                            $action_bzrCgit = $action_reMig->{'bzr-cgit'};
-                            $action_gitpush = $action_reMig->{'git-push'};
-                            $action_check = $action_reMig->{'git-check'};
-                        }
-                    } else {
-                        print "[error] Action \"bzr convert git -> $pkg_name\" | $action_branch\n";
-                    }
-                } else {
-                    print "[error] Action \"bzr branch -> $pkg_name\" | $action_branch\n";
-                }
-                $i++;
-            }
+            print "\n";
+            print "====" x 5 . " Migration all packages in group \"$input_group\" has been finished ";
+            print "====" x 5 . "\n\n";
         } else {
             print "\n";
             print "Info : \n";
@@ -241,6 +407,124 @@ sub action_bzr2git2 {
         exit 0;
     }
 }
+# Subroutine for get amount of packages on group :
+# ------------------------------------------------------------------------
+sub bzr2git_list_group {
+    my ($self, $allconfig) = @_;
+
+    # Define hash :
+    my %data = ();
+    my $data_list = '';
+
+    # Get data current config :
+    my $curr_build = $allconfig->{'build'};
+    my $curr_pkg = $allconfig->{'pkg'};
+    my $curr_group = $curr_pkg->{'group'};
+    my $list_pkg = $curr_pkg->{'pkgs'};
+
+    # Get list group :
+    my $get_list_group = $self->list_all_pkg_group($allconfig);
+    my @list_group = @{$get_list_group->{'data'}};
+
+    # While loop to get list packages group :
+    my $i = 0;
+    my $until = scalar keys(@list_group);
+    my $num = 0;
+    my $amount_pkg = '';
+    my @pre_dataGroup = ();
+    while ($i < $until) {
+        $amount_pkg = $self->amount_pkg($allconfig, $list_group[$i]);
+        if ($amount_pkg > 0) {
+            $num = $num + 1;
+            $data_list .= sprintf("$num. %-20s %s\n", "$list_group[$i]", "[$amount_pkg]");
+            $pre_dataGroup[$num] = $list_group[$i];
+        }
+        $i++;
+    }
+    my @data_group = grep($_, @pre_dataGroup);
+
+    $data{'msg'} = $data_list;
+    $data{'data'} = \@data_group;
+    return \%data;
+}
+# Subroutine for action migration all packages :
+# ------------------------------------------------------------------------
+sub action_bzr2git1 {
+    my ($self, $allconfig) = @_;
+
+    # Define scalar :
+    my $confirm_form;
+    my $confirm_form_pkg;
+    my $data_confirm = 0;
+    my $data_confirm_pkg = 0;
+
+    # Get list group :
+    my $getList_group = $self->bzr2git_list_group($allconfig);
+    my $list = $getList_group->{'msg'};
+    my @list_groups = @{$getList_group->{'data'}};
+
+    # Form Confirm :
+    print "\n";
+    print "You want migration all packages with automatically ? [y or n] ";
+    chomp($confirm_form = <STDIN>);
+    if ($confirm_form eq 'y' or $confirm_form eq 'Y') {
+        $data_confirm = 1;
+        $data_confirm_pkg = 1;
+    } else {
+        $data_confirm = 0;
+    }
+
+    print "\n";
+    print "List Group packages to Migration : \n";
+    print "---" x 15 . "\n";
+    print $list;
+    print "---" x 15 . "\n";
+
+    # While loop to migration :
+    my $i = 0;
+    my $until = scalar @list_groups;
+    my $amount_pkg = 0;
+    my $get_list_pkgs;
+    my @list_packages;
+    my $data_groups;
+    while ($i < $until) {
+        $data_groups = $list_groups[$i];
+        $get_list_pkgs = $self->filter_listpkg_based_group($allconfig, $data_groups);
+        $amount_pkg = $self->amount_pkg($allconfig, $data_groups);
+        @list_packages = @{$get_list_pkgs->{'data'}};
+
+        # Check Confirm :
+        if ($data_confirm == 1) {
+
+            print "\n";
+            print "Action Migration for all packages in group \"$data_groups [$amount_pkg]\" \n";
+            print "----" x 18 . "\n";
+
+            # Action Migration :
+            $self->bzr2git_action_migration($allconfig, \@list_packages);
+        }
+        if ($data_confirm == 0) {
+            print "\n";
+            print "You want to migration all packages in group \"$data_groups [$amount_pkg]\" ? [y or n] ";
+            chomp($confirm_form_pkg = <STDIN>);
+            if ($confirm_form_pkg eq 'y' or $confirm_form_pkg eq 'Y') {
+                print "\n";
+                print "[migration] All packages in group \"$data_groups\" \n";
+                print "----" x 18 . "\n";
+
+                # Action Migration :
+                $self->bzr2git_action_migration($allconfig, \@list_packages);
+            } else {
+                print "\n";
+                print "[no-migration] All packages in group \"$data_groups\" \n";
+            }
+        }
+        $i++;
+    }
+    print "\n";
+    print "====" x 5 . " Migration packages has been finished ";
+    print "====" x 5 . "\n\n";
+}
 # Action Bzr2git :
 # ------------------------------------------------------------------------
 sub action_bzr2git {
@@ -250,7 +534,8 @@ sub action_bzr2git {
     # For Action :
     my $switch_act = {
         '1' => 'action_bzr2git1',
-        '2' => 'action_bzr2git2'
+        '2' => 'action_bzr2git2',
+        '3' => 'action_bzr2git_single'
     };
 
     # Form action migration :
@@ -260,6 +545,7 @@ sub action_bzr2git {
     print "-----" x 15 . "\n";
     print "1. All Packages\n";
     print "2. Specific Group Packages\n";
+    print "3. Single Packages\n";
     print "Answer: ";
     chomp($choose_act = <STDIN>);
     if (exists $switch_act->{$choose_act}) {
@@ -1938,6 +2224,7 @@ sub _list_pkg {
 
             # Check if $ARGV[2] == 'all' :
             if ($ARGV[2] eq 'all') {
+                print Dumper $allconfig;
                 my $list_all_pkggroup = $self->list_all_pkg_group($allconfig);
                 my @list_allpkg_group = @{$list_all_pkggroup->{'data'}};
 
@@ -4920,6 +5207,13 @@ sub save_newConfig {
             # Create File :
             my $newData_cfg = encode_json($new_config);
             BlankOnDev::Utils::file->create($file_name, $dir_dev, $newData_cfg);
+        },
+        'bzr2git' => sub {
+            my ($new_config) = @_;
+
+            # Create File :
+            my $newData_cfg = encode_json($new_config);
+            BlankOnDev::Utils::file->create($file_name, $dir_dev, $newData_cfg);
         }
     };
 
@@ -5585,8 +5879,61 @@ sub prepare_config {
 
             return \%data;
         },
-        'bzrCgit' => sub {
-            ''
+        'bzr2git' => sub {
+            my ($curr_cfg, $pkg_input, $branch, $bzr_cgit, $git_push, $git_check, $time_branch, $time_gitpush) = @_;
+
+            # Define hash or scalar :
+            my %data = ();
+
+            # get data current pkg :
+            my $curr_timezone = $curr_cfg->{'timezone'};
+            my $curr_prepare = $curr_cfg->{'prepare'};
+            my $curr_build = $curr_cfg->{'build'};
+            my $build_rilis = $curr_build->{'rilis'};
+            my $curr_bzr = $curr_cfg->{'bzr'};
+            my $curr_git = $curr_cfg->{'git'};
+            my $curr_pkg = $curr_cfg->{'pkg'};
+            my $pkg_dirpkg = $curr_pkg->{'dirpkg'};
+            my $pkg_group = $curr_pkg->{'group'};
+            my $pkg_list = $curr_pkg->{'pkgs'};
+
+            # Data Current Packages :
+            my $dataCurr_pkg = $pkg_list->{$pkg_input};
+            my $status_pkg = $dataCurr_pkg->{'status'};
+            my $stts_bzrPush = $status_pkg->{'git-push'};
+            my $stts_bzrBranch = $status_pkg->{'bzr-branch'};
+            my $stts_bzrCgit = $status_pkg->{'bzrConvertGit'};
+
+            # Update Packages:
+            my $updatePkg_stts = Hash::MultiValue->new(%{$pkg_list->{$pkg_input}});
+            $updatePkg_stts->set('status' => {
+                    'bzr-branch' => $branch,
+                    'git-push' => $bzr_cgit,
+                    'bzrConvertGit' => $git_push,
+                    'ongit' => $git_check,
+                });
+            $updatePkg_stts->set('date-branch' => $time_branch);
+            $updatePkg_stts->set('date-gitpush' => $time_gitpush);
+            my $rUpdate_sttsPkg = $updatePkg_stts->as_hashref;
+
+            # Update Data Packages :
+            my $updatePkgs = Hash::MultiValue->new(%{$pkg_list});
+            $updatePkgs->set($pkg_input => $rUpdate_sttsPkg);
+            my $newData_pkg = $updatePkgs->as_hashref;
+
+            # Create New Data :
+            $data{'timezone'} = $curr_timezone;
+            $data{'prepare'} = $curr_prepare;
+            $data{'build'} = $curr_build;
+            $data{'bzr'} = $curr_bzr;
+            $data{'git'} = $curr_git;
+            $data{'pkg'} = {
+                'dirpkg' => $pkg_dirpkg,
+                'group' => $pkg_group,
+                'pkgs' => $newData_pkg,
+            };
+
+            return \%data;
         },
     };
 
