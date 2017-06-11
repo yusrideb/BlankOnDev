@@ -5,6 +5,7 @@ use warnings FATAL => 'all';
 # Import :
 use Term::ReadKey;
 use BlankOnDev::Rilis;
+use BlankOnDev::DateTime;
 
 # Version :
 our $VERSION = '0.1004';
@@ -16,15 +17,36 @@ sub form_timezone {
     # Prepare From TimeZone :
     my $form_timezone;
     my $data_timezone = '';
+    my $id_timezone = BlankOnDev::DateTime::id_timezone();
+    my $tz_long_short = $id_timezone->{'long-short'};
+    my $tz_num_short = $id_timezone->{'num-short'};
+    my $tz_num_long = $id_timezone->{'num-long'};
+    if (exists $tz_long_short->{$time_zone}) {
+        $time_zone = uc $tz_long_short->{$time_zone}
+    }
 
     print "\n";
-    print "Enter your time zone : ";
+    print "List TimeZone : \n";
+    print "1. WIB \n";
+    print "2. WITA \n";
+    print "3. WIT \n";
+    if ($time_zone ne '') {
+        print "Enter your time zone [$time_zone] : ";
+    } else {
+        print "Enter your time zone : ";
+    }
     chomp($form_timezone = <STDIN>);
     if ($form_timezone ne '') {
-        $data_timezone = $form_timezone
+        if ($form_timezone =~ m/^[0-9]$/) {
+            $data_timezone = $tz_num_long->{$form_timezone};
+        } else {
+            $data_timezone = $tz_num_long->{'1'};
+        }
     } else {
         $data_timezone = 'Asia/Makassar';
     }
+    print "\n";
+    print "Active TimeZone : $data_timezone\n";
     return $data_timezone;
 }
 # Subroutine for form blankon release :

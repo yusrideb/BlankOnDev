@@ -18,7 +18,7 @@ use BlankOnDev::Rilis;
 use BlankOnDev::command;
 
 # Version :
-our $VERSION = '0.1004';;
+our $VERSION = '0.1004';
 
 # Our vars :
 our $gencfg = {};
@@ -114,6 +114,7 @@ sub _general_config {
     my $result_dataCfg = $new_dataCfg->as_hashref;
 
     my $new_genCfg = Hash::MultiValue->new();
+    $new_genCfg->add('timezone' => $data_timezone);
     $new_genCfg->add('rilis' => $boi_rilis);
     $new_genCfg->add('data' => $result_dataCfg);
     my $result_cfg = $new_genCfg->as_hashref;
@@ -778,7 +779,7 @@ sub read_config_bzr2git {
 
     # For Release set :
     # ----------------------------------------------------------------
-    if ($ARGV[0] ne 'config') {
+    if (exists $ARGV[0] and $ARGV[0] ne 'config') {
         boi_rilis() if $gencfg->{'rilis'} eq '';
         $rilisCfg = $gencfg->{'rilis'} if $gencfg->{'rilis'} ne '';
     } else {
