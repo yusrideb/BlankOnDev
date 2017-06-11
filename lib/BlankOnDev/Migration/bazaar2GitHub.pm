@@ -52,7 +52,6 @@ sub action_re_migration {
     # Get data current config :
     my $curr_pkg = $allconfig->{'pkg'};
     my $dirpkg = $curr_pkg->{'dirpkg'};
-    my $list_pkg = $curr_pkg->{'pkgs'};
     my $locdir_pkg = $dirpkg.'/'.$pkg_group.'/'.$pkg_name;
 
     system("rm -rf $locdir_pkg");
@@ -119,8 +118,6 @@ sub bzr2git_action_migration {
     my $pkg_name;
     my $pkg_group;
     my $result_cfg = $allconfig;
-    my $timestamp;
-    my $get_dataTime;
     while ($i_p < $until_p) {
         $pkg_name = $list_packages[$i_p]->{'name'};
         $pkg_group = $list_packages[$i_p]->{'group'};
@@ -275,7 +272,6 @@ sub amount_pkg {
     my $curr_build = $allconfig->{'build'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $list_pkg = $curr_pkg->{'pkgs'};
-    my $size_list_pkg = scalar keys(%{$list_pkg});
 
     # While loop to get list packages :
     my $i = 0;
@@ -301,7 +297,6 @@ sub bzr2git_get_list_group_amount_pkg {
     my $curr_build = $allconfig->{'build'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $list_group = $curr_pkg->{'group'};
-    my $list_pkg = $curr_pkg->{'pkgs'};
     my $size_list_group = scalar keys(%{$list_group});
 
     # Check count list packages group :
@@ -352,8 +347,6 @@ sub action_bzr2git2 {
 
     # Get data current config :
     my $curr_pkg = $allconfig->{'pkg'};
-    my $dirpkg = $curr_pkg->{'dirpkg'};
-    my $list_pkg = $curr_pkg->{'pkgs'};
     my $data_list_grp = $self->bzr2git_get_list_group_amount_pkg($allconfig);
     my $choice_grp = $data_list_grp->{'data'};
 
@@ -411,12 +404,6 @@ sub bzr2git_list_group {
     # Define hash :
     my %data = ();
     my $data_list = '';
-
-    # Get data current config :
-    my $curr_build = $allconfig->{'build'};
-    my $curr_pkg = $allconfig->{'pkg'};
-    my $curr_group = $curr_pkg->{'group'};
-    my $list_pkg = $curr_pkg->{'pkgs'};
 
     # Get list group :
     my $get_list_group = $self->list_all_pkg_group($allconfig);
@@ -1796,7 +1783,7 @@ sub _addpkg_file {
                             });
                         my $for_saveCfg;
                         print "$lines\n";
-#
+
                         unless (exists $curr_data_pkg->{'group'}->{$input_group} && exists $curr_data_pkg->{'pkgs'}->{$lines}) {
                             $for_saveCfg = save_newConfig();
                             $for_saveCfg->{'addpkg'}($data_allcfg);
@@ -1866,7 +1853,6 @@ sub _removepkg {
     my $input_pkg;
 
     # Define scalar for config :
-    my $build = $allconfig->{build};
     my $curr_data_pkg = $allconfig->{'pkg'};
     my $list_group = $curr_data_pkg->{'group'};
     my $list_pkgs = $curr_data_pkg->{'pkgs'};
@@ -2090,10 +2076,8 @@ sub list_all_pkg_group {
     my %data = ();
 
     # Get data current config :
-    my $curr_build = $allconfig->{'build'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $list_group = $curr_pkg->{'group'};
-    my $list_pkg = $curr_pkg->{'pkgs'};
     my $size_list_group = scalar keys(%{$list_group});
 
     # Check count list packages group :
@@ -2483,7 +2467,6 @@ sub search_pkg {
     my %data = ();
 
     # Get data current config :
-    my $curr_build = $allconfig->{'build'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $list_pkg = $curr_pkg->{'pkgs'};
 
@@ -2558,21 +2541,6 @@ sub form_search_pkg {
 # ------------------------------------------------------------------------
 sub _search_pkg {
     my ($self, $allconfig) = @_;
-
-    # Define hash or scalar :
-    my %data = ();
-
-    # Get data current config :
-    my $curr_build = $allconfig->{'build'};
-    my $buld_rilis = $curr_build->{'rilis'};
-    my $curr_pkg = $allconfig->{'pkg'};
-
-    # For Data Developer :
-    my $data_dev = BlankOnDev::DataDev::data_dev();
-    my $dir_dev = $data_dev->{'dir_dev'};
-    my $prefix_flcfg = $data_dev->{'prefix_flcfg'};
-    my $file_cfg_ext = $data_dev->{'fileCfg_ext'};
-    my $file_nameCfg = $prefix_flcfg.$buld_rilis.$file_cfg_ext;
 
     # For Arguments :
     my $arg_len = scalar @ARGV;
@@ -2763,8 +2731,6 @@ sub branch_pkg_group {
     my $action_rebranch = 'new';
 
     # For All config :
-    my $curr_build = $allconfig->{'build'};
-    my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
     my $locdir_group = $dir_pkgs.'/'.$input_group;
@@ -2854,20 +2820,10 @@ sub _branch {
     my $confirm_rebranch;
 
     # For All config :
-    my $curr_build = $allconfig->{'build'};
-    my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
     my $pkg_groups = $curr_pkg->{'group'};
     my $pkg_list = $curr_pkg->{'pkgs'};
-    my $bzr = $allconfig->{'bzr'};
-
-    # For Data Developer :
-    my $data_dev = BlankOnDev::DataDev::data_dev();
-    my $logs_dir = $data_dev->{'dirlogs'};
-    my $prefix_log = $data_dev->{'prefix_fllog'};
-    my $ext_out_log = $data_dev->{'log_ext_out'};
-    my $ext_err_log = $data_dev->{'log_ext_err'};
 
     # Data current config :
     my $curr_dataPkg_grp = $allconfig->{'pkg'}->{'group'};
@@ -3098,7 +3054,6 @@ sub bazaar_cgit_pkg_group {
     # For All config :
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
-    my $pkg_list = $curr_pkg->{'pkgs'};
 
     my $list_pkg = $self->filter_listpkg_based_group($allconfig, $input_group);
     if ($list_pkg->{'result'} == 1) {
@@ -3168,27 +3123,12 @@ sub _bzr_cgit {
     my $arg_len = scalar @ARGV;
     my $num_pkg_group;
     my $input_group;
-    my $input_pkg;
-    my $confirm_rebranch;
-    my $action_rebranch = 'new';
 
     # For All config :
-    my $curr_build = $allconfig->{'build'};
-    my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
-    my $dir_pkgs = $curr_pkg->{'dirpkg'};
     my $pkg_groups = $curr_pkg->{'group'};
     my $pkg_list = $curr_pkg->{'pkgs'};
     my $bzr = $allconfig->{'bzr'};
-    my $bzr_url = $bzr->{'url'};
-
-    # For Data Developer :
-    my $data_dev = BlankOnDev::DataDev::data_dev();
-    my $home_dir = $data_dev->{'home_dir'};
-    my $logs_dir = $data_dev->{'dirlogs'};
-    my $prefix_log = $data_dev->{'prefix_fllog'};
-    my $ext_out_log = $data_dev->{'log_ext_out'};
-    my $ext_err_log = $data_dev->{'log_ext_err'};
 
     # Data current config :
     my $curr_dataPkg_grp = $allconfig->{'pkg'}->{'group'};
@@ -3398,22 +3338,11 @@ sub gitpush_pkg {
 sub gitpush_pkg_group {
     my ($self, $allconfig, $input_group) = @_;
 
-    # Define scalar :
-    my $confirm_rebranch;
-    my $action_rebranch = 'new';
-
     # For All config :
     my $curr_build = $allconfig->{'build'};
     my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
-
-    # For Data Developer :
-    my $data_dev = BlankOnDev::DataDev::data_dev();
-    my $logs_dir = $data_dev->{'dirlogs'};
-    my $prefix_log = $data_dev->{'prefix_bzrbranch_log'};
-    my $ext_out_log = $data_dev->{'log_ext_out'};
-    my $ext_err_log = $data_dev->{'log_ext_err'};
 
     # Get list Packages based Group :
     my $list_pkg = $self->filter_listpkg_based_group($allconfig, $input_group);
@@ -3695,19 +3624,8 @@ sub gitpush_new_pkg_group {
     my ($self, $allconfig, $input_group, $commit) = @_;
 
     # For All config :
-    my $curr_build = $allconfig->{'build'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
-    my $pkg_groups = $curr_pkg->{'group'};
-    my $pkg_list = $curr_pkg->{'pkgs'};
-
-    # For Data Developer :
-    my $data_dev = BlankOnDev::DataDev::data_dev();
-    my $home_dir = $data_dev->{'home_dir'};
-    my $logs_dir = $data_dev->{'dirlogs'};
-    my $prefix_log = $data_dev->{'prefix_fllog'};
-    my $ext_out_log = $data_dev->{'log_ext_out'};
-    my $ext_err_log = $data_dev->{'log_ext_err'};
 
     my $list_pkg = $self->filter_listpkg_based_group($allconfig, $input_group);
     if ($list_pkg->{'result'} == 1) {
@@ -3961,8 +3879,6 @@ sub rebranch_pkg {
     my ($self, $allconfig, $group_pkg, $pkg_name, $action_rebranch) = @_;
 
     # For All config :
-    my $curr_build = $allconfig->{'build'};
-    my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
     my $locdir_group = $dir_pkgs.'/'.$group_pkg;
@@ -4025,8 +3941,6 @@ sub rebranch_pkg_group {
         my $size_list = scalar keys(@list_pkgs);
         my $saveConfig;
         my $result_cfg = $allconfig;
-        my $count_branch = 0;
-        my $count_rebranch = 0;
         my $num = $i;
         while ($i < $size_list) {
             $num = $num + 1;
@@ -4034,12 +3948,7 @@ sub rebranch_pkg_group {
             my $pkg_name = $list_pkgs[$i]->{'name'};
 
             # For file/dir pkgs :
-            my $dirPkg_grp = $dir_pkgs.'/'.$input_group;
             my $dest_dir = $dir_pkgs.'/'.$input_group.'/'.$pkg_name;
-            my $filename_outlogs = $prefix_log.$pkg_name.'_'.$build_rilis.$ext_out_log;
-            my $filename_errlogs = $prefix_log.$pkg_name.'_'.$build_rilis.$ext_err_log;
-            my $locfile_outlogs = $logs_dir.$build_rilis.'/'.$filename_outlogs;
-            my $locfile_errlogs = $logs_dir.$build_rilis.'/'.$filename_errlogs;
 
             # Check exists pkg :
             if (-d $dest_dir) {
@@ -4086,25 +3995,14 @@ sub _re_branch {
     my $arg_len = scalar @ARGV;
     my $num_pkg_group;
     my $input_group;
-    my $input_pkg;
     my $confirm_rebranch;
-    my $action_rebranch = 'new';
 
     # For All config :
     my $curr_build = $allconfig->{'build'};
-    my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
     my $pkg_groups = $curr_pkg->{'group'};
     my $pkg_list = $curr_pkg->{'pkgs'};
-    my $bzr = $allconfig->{'bzr'};
-
-    # For Data Developer :
-    my $data_dev = BlankOnDev::DataDev::data_dev();
-    my $logs_dir = $data_dev->{'dirlogs'};
-    my $prefix_log = $data_dev->{'prefix_fllog'};
-    my $ext_out_log = $data_dev->{'log_ext_out'};
-    my $ext_err_log = $data_dev->{'log_ext_err'};
 
     # Data current config :
     my $curr_dataPkg_grp = $allconfig->{'pkg'}->{'group'};
@@ -4436,7 +4334,6 @@ sub _re_gitpush {
     my $curr_pkg = $allconfig->{'pkg'};
     my $pkg_groups = $curr_pkg->{'group'};
     my $pkg_list = $curr_pkg->{'pkgs'};
-    my $bzr = $allconfig->{'bzr'};
 
     # Data current config :
     my $curr_dataPkg_grp = $allconfig->{'pkg'}->{'group'};
@@ -4593,12 +4490,7 @@ sub _re_gitpush {
 sub git_check_allpkg {
     my ($self, $allconfig) = @_;
 
-    # Define scalar :
-    my $act_gitcheck;
-
     # For All config :
-    my $curr_build = $allconfig->{'build'};
-    my $build_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $dir_pkgs = $curr_pkg->{'dirpkg'};
 
@@ -4745,23 +4637,14 @@ sub _git_check {
     # Define scalar :
     my $arg_len = scalar @ARGV;
     my $form_group;
-    my $num_pkg_group;
 
     # For All config :
-    my $curr_build = $allconfig->{'build'};
-    my $curr_rilis = $curr_build->{'rilis'};
     my $curr_pkg = $allconfig->{'pkg'};
     my $curr_dirpkg = $curr_pkg->{'dirpkg'};
     my $pkg_groups = $curr_pkg->{'group'};
     my $pkg_list = $curr_pkg->{'pkgs'};
     my $data_list_grp = $self->bzr2git_get_list_group_amount_pkg($allconfig);
     my $choice_grp = $data_list_grp->{'data'};
-
-    # Data current config :
-    my $curr_dataPkg_grp = $allconfig->{'pkg'}->{'group'};
-    my $curr_data_pkg = $allconfig->{'pkg'}->{'pkgs'};
-    my $size_pkgGrp = scalar keys(%{$curr_dataPkg_grp});
-    my $size_pkg = scalar keys(%{$curr_data_pkg});
 
     # ------------------------------------------------------------------------
     # Check IF $arg_len == 2 :
@@ -4896,12 +4779,6 @@ sub usage {
 
     print "USAGE : boidev bzr2git <OPTIONS2>\n";
     BlankOnDev::usage_bzr2git;
-#    printf("%-20s %s\n", "config", "Untuk konfigurasi sebelum menggunakan perintah $0");
-#    printf("%-20s %s\n", "branch", "Untuk download paket dari Bazaar Server");
-#    printf("%-20s %s\n", "listgit", "Untuk melihat daftar paket yang sudah di masukkan ke git");
-#    printf("%-20s %s\n", "list", "Untuk melihat daftar paket yang sudah ditambahkan di lokal");
-#    printf("%-20s %s\n", "addpkg", "Untuk menambahkan daftar paket yang akan di branch dari Bazaar");
-#    printf("%-20s %s\n", "execute", "Untuk melihat daftar paket yang sudah di masukkan ke git");
     print "\n";
     exit 0;
 }
@@ -5718,7 +5595,6 @@ sub prepare_config {
             my $curr_timezone = $curr_cfg->{'timezone'};
             my $curr_prepare = $curr_cfg->{'prepare'};
             my $curr_build = $curr_cfg->{'build'};
-            my $build_rilis = $curr_build->{'rilis'};
             my $curr_bzr = $curr_cfg->{'bzr'};
             my $curr_git = $curr_cfg->{'git'};
             my $curr_pkg = $curr_cfg->{'pkg'};
@@ -5835,7 +5711,6 @@ sub prepare_config {
             my $curr_timezone = $curr_cfg->{'timezone'};
             my $curr_prepare = $curr_cfg->{'prepare'};
             my $curr_build = $curr_cfg->{'build'};
-            my $build_rilis = $curr_build->{'rilis'};
             my $curr_bzr = $curr_cfg->{'bzr'};
             my $curr_git = $curr_cfg->{'git'};
             my $curr_pkg = $curr_cfg->{'pkg'};
@@ -5889,20 +5764,12 @@ sub prepare_config {
             my $curr_timezone = $curr_cfg->{'timezone'};
             my $curr_prepare = $curr_cfg->{'prepare'};
             my $curr_build = $curr_cfg->{'build'};
-            my $build_rilis = $curr_build->{'rilis'};
             my $curr_bzr = $curr_cfg->{'bzr'};
             my $curr_git = $curr_cfg->{'git'};
             my $curr_pkg = $curr_cfg->{'pkg'};
             my $pkg_dirpkg = $curr_pkg->{'dirpkg'};
             my $pkg_group = $curr_pkg->{'group'};
             my $pkg_list = $curr_pkg->{'pkgs'};
-
-            # Data Current Packages :
-            my $dataCurr_pkg = $pkg_list->{$pkg_input};
-            my $status_pkg = $dataCurr_pkg->{'status'};
-            my $stts_bzrPush = $status_pkg->{'git-push'};
-            my $stts_bzrBranch = $status_pkg->{'bzr-branch'};
-            my $stts_bzrCgit = $status_pkg->{'bzrConvertGit'};
 
             # Update Packages:
             my $updatePkg_stts = Hash::MultiValue->new(%{$pkg_list->{$pkg_input}});
