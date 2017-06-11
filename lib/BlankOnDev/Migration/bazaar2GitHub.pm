@@ -349,10 +349,6 @@ sub action_bzr2git2 {
 
     # Define scalar :
     my $form_group;
-    my $action_branch;
-    my $action_bzrCgit;
-    my $action_gitpush;
-    my $action_check;
 
     # Get data current config :
     my $curr_pkg = $allconfig->{'pkg'};
@@ -651,7 +647,7 @@ sub check_exists_group {
     my ($self, $type, $group_cfg, $new_group) = @_;
 
     my %data = ();
-    my $result = 0;
+    my $result = 1;
     my $list_grp = '';
     my $check_list = 0;
     my $count = scalar keys(%{$group_cfg});
@@ -667,7 +663,8 @@ sub check_exists_group {
         }
         $result = 1;
     } else {
-        if ($count > 0) {
+        print "Jumlah $count\n";
+        if ($count >= 1) {
             while (my ($key, $value) = each %{$group_cfg}) {
                 $list_grp .= "- $key\n";
                 if (exists $group_cfg->{$new_group}) {
@@ -679,7 +676,7 @@ sub check_exists_group {
             $check_list = 1;
         } else {
             $list_grp = '';
-            $check_list = 0;
+            $check_list = 1;
         }
     }
     $data{'result'} = $result;
@@ -730,9 +727,6 @@ sub _addpkg_group {
             if ($input_new_grp =~ m/^[A-Za-z0-9\-\_]+$/) {
                 $new_grp = $input_new_grp;
             }
-            elsif ($input_new_grp =~ m/^[A-Za-z]+$/) {
-                $new_grp = $input_new_grp;
-            }
             else {
                 $new_grp = '';
                 print "\n";
@@ -746,6 +740,8 @@ sub _addpkg_group {
 
             # Check Group Name :
             my $check_group = $self->check_exists_group('check', $curr_pkg->{'group'}, $new_grp);
+            print "Resutl Check : \n";
+            print Dumper $check_group;
             if ($check_group->{'result'} == 1) {
                 my $locdir_pkg = $dir_dev.$dir_pkgs;
                 my $locdir_rilis = $locdir_pkg.'/'.$build_rilis;
@@ -4767,8 +4763,8 @@ sub _git_check {
 
     # Define scalar :
     my $arg_len = scalar @ARGV;
+    my $form_group;
     my $num_pkg_group;
-    my $input_group;
 
     # For All config :
     my $curr_build = $allconfig->{'build'};
@@ -4777,6 +4773,8 @@ sub _git_check {
     my $curr_dirpkg = $curr_pkg->{'dirpkg'};
     my $pkg_groups = $curr_pkg->{'group'};
     my $pkg_list = $curr_pkg->{'pkgs'};
+    my $data_list_grp = $self->bzr2git_get_list_group_amount_pkg($allconfig);
+    my $choice_grp = $data_list_grp->{'data'};
 
     # Data current config :
     my $curr_dataPkg_grp = $allconfig->{'pkg'}->{'group'};
@@ -4788,6 +4786,27 @@ sub _git_check {
     # Check IF $arg_len == 2 :
     # ------------------------------------------------------------------------
     if ($arg_len == 2) {
+
+        # Form :
+        print "\n";
+        print "Choose packages group : \n";
+        print "---" x 18 . "\n";
+        print $data_list_grp->{'choice'};
+        print "---" x 18 . "\n";
+        print "Enter number of group name : ";
+        chomp($form_group = <STDIN>);
+        if (exists $choice_grp->{$form_group}) {
+            my $input_group = $choice_grp->{$form_group};
+
+            # Action Check :
+            $self->git_check_allpkg_grp($allconfig, $input_group);
+        } else {
+            print "\n";
+            print "Info : Enter number choice\n";
+            print "====" x 18 . "\n";
+            print "Please enter number choice. \n\n";
+            exit 0;
+        }
     }
     # ------------------------------------------------------------------------
     # Check IF $arg_len == 3 :
