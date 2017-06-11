@@ -52,6 +52,7 @@ sub check_dir_boidev {
 sub FORM {
     my ($self, $form, $data_config) = @_;
 
+    my $result = '';
     my $switch = {
         'timezone' => 'form_timezone',
         'rilis' => 'form_boi_rilis',
@@ -64,8 +65,9 @@ sub FORM {
     # Check Form :
     if (exists $switch->{$form}) {
         my $subr = $switch->{$form};
-        BlankOnDev::Form->$subr($data_config);
+        $result = BlankOnDev::Form->$subr($data_config);
     }
+    return $result;
 }
 
 # Subroutine for option help.

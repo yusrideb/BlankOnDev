@@ -36,6 +36,7 @@ lib/BlankOnDev/Form.pm
 lib/BlankOnDev/Form/github.pm
 lib/BlankOnDev/Rilis.pm
 lib/BlankOnDev/command.pm
+lib/BlankOnDev/system.pm
 script/boi_mig.sh
 script/boidev
 share/share.txt
