@@ -15,7 +15,7 @@ our $VERSION = '0.1004';
 sub kill_exists_ps {
     my ($self, $gencfg) = @_;
     my $form_confirm;
-    my $curr_timezone = $gencfg->{'timezone'};
+    my $curr_timezone = exists $gencfg->{'timezone'} && $gencfg->{'timezone'} ne '' ? $gencfg->{'timezone'} : 'Asia/Makassar';
     my $timestamp = time();
     my $get_dataTime = BlankOnDev::DateTime->get($curr_timezone, $timestamp, {
             'date' => '-',

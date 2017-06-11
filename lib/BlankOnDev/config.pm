@@ -213,14 +213,12 @@ sub _list_cfg {
     my $file_cfg_ext = $data_setup->{'fileCfg_ext'};
 
     print Dumper $gencfg;
+    # General Configure :
+    my $data_cfg = $gencfg->{data};
+    my $name_cfg = $data_cfg->{'name'};
+    my $email_gpg = $data_cfg->{'email-gpg'};
 
     # Get Data current Configure :
-    my $prepare = $allconfig->{prepare};
-    my $build = $allconfig->{build};
-    my $build_rilis = $build->{'rilis'};
-    my $build_pgp = $build->{'gpg'};
-    my $pgp_name = $build_pgp->{'name'};
-    my $pgp_email = $build_pgp->{'email'};
     my $bzr = $allconfig->{bzr};
     my $bzr_url = $bzr->{'url'};
     my $git = $allconfig->{git};
@@ -236,8 +234,8 @@ sub _list_cfg {
     print "\n";
 
     print "PGP Configure :\n";
-    print "Name : $pgp_name\n";
-    print "Email : $pgp_email\n\n";
+    print "Name : $name_cfg\n";
+    print "Email : $email_gpg\n\n";
 
     print "URL Configure : \n";
     print "Bzr Branch : $bzr_url\n";
@@ -322,6 +320,7 @@ sub config {
     my $home_dir = $ENV{"HOME"};
 
     # Get current general config :
+    my $curr_timezone = '';
     my $data_gencfg = $gencfg->{'data'};
     my $curr_name = $data_gencfg->{'name'};
     my $curr_emailgit = $data_gencfg->{'email-git'};
@@ -350,12 +349,7 @@ sub config {
 
     # For TimeZone :
     # ----------------------------------------------------------------
-    print "Example name TimeZone \"Asia/Makassar\" \n";
-    print "Set your timezone name : ";
-    chomp($timezone = <STDIN>);
-    if ($timezone ne '') {
-        $time_zone = $timezone;
-    }
+    $time_zone = BlankOnDev->FORM('timezone', $curr_timezone);
 
     # For GitHub Configure
     # ------------------------------------------------------------------------
@@ -849,19 +843,27 @@ sub read_config_bzr2git {
                 $adddt_pkg->add('group' => {});
                 $adddt_pkg->add('pkgs' => {});
                 $result_adddtPkg = $adddt_pkg->as_hashref;
-                $format_config->{'pkg'} = $result_adddtPkg;
-                $data = $format_config;
+
+                my $set_pkgs = Hash::MultiValue->new(%{$format_config});
+                $set_pkgs->set('pkg' => $result_adddtPkg);
+                my $result_cfg = $set_pkgs->as_hashref;
+                $data = $result_cfg
             }
         } else {
-            BlankOnDev::Utils::file->create($file_cfg, $dir_dev, encode_json($format_config));
-#            $format_config->{'pkg'}->{'dirpkg'} = $dir_pkgrilis;
             $adddt_pkg = Hash::MultiValue->new();
             $adddt_pkg->add('dirpkg' => $dir_pkgrilis);
             $adddt_pkg->add('group' => {});
             $adddt_pkg->add('pkgs' => {});
             $result_adddtPkg = $adddt_pkg->as_hashref;
             $format_config->{'pkg'} = $result_adddtPkg;
-            $data = $format_config;
+
+            my $set_pkgs = Hash::MultiValue->new(%{$format_config});
+            $set_pkgs->set('pkg' => $result_adddtPkg);
+            my $result_cfg = $set_pkgs->as_hashref;
+            $data = $result_cfg;
+
+            BlankOnDev::Utils::file->create($file_cfg, $dir_dev, encode_json($result_cfg));
+#            $format_config->{'pkg'}->{'dirpkg'} = $dir_pkgrilis;
         }
     } else {
         mkdir($dir_data_boidev);

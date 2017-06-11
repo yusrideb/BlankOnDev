@@ -16,13 +16,16 @@ sub form_timezone {
     my ($self, $time_zone) = @_;
     # Prepare From TimeZone :
     my $form_timezone;
+    my $timezone = $time_zone ? $time_zone : 'Asia/Makassar';
     my $data_timezone = '';
     my $id_timezone = BlankOnDev::DateTime::id_timezone();
     my $tz_long_short = $id_timezone->{'long-short'};
     my $tz_num_short = $id_timezone->{'num-short'};
     my $tz_num_long = $id_timezone->{'num-long'};
-    if (exists $tz_long_short->{$time_zone}) {
-        $time_zone = uc $tz_long_short->{$time_zone}
+    if (exists $tz_long_short->{$timezone}) {
+        $timezone = uc $tz_long_short->{$timezone}
+    } else {
+        $timezone = $timezone;
     }
 
     print "\n";
@@ -30,8 +33,8 @@ sub form_timezone {
     print "1. WIB \n";
     print "2. WITA \n";
     print "3. WIT \n";
-    if ($time_zone ne '') {
-        print "Enter your time zone [$time_zone] : ";
+    if ($timezone ne '') {
+        print "Enter your time zone [$timezone] : ";
     } else {
         print "Enter your time zone : ";
     }
@@ -88,6 +91,9 @@ sub form_boi_rilis {
         $boi_rilis = 'tambora';
         $status = 1;
     }
+
+    print "\n";
+    print "Rilis Activated : $boi_rilis\n\n";
 
     $data{'result'} = $status;
     $data{'data'} = $boi_rilis;
