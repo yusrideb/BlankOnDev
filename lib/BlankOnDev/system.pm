@@ -28,8 +28,6 @@ sub kill_exists_ps {
     my $minutes_time = $get_time->{minute};
     $minutes_time = length $minutes_time == 1 ? '0'.$get_time->{minute} : $get_time->{minute};
     my $time_proccess = "$hour_time:$minutes_time";
-#    print "Time : $time_proccess\n";
-#    print Dumper $get_dataTime;
     my @ps_list = ();
     my @processes = `ps -ef | grep boidev`;
     @processes = grep(!/grep/, @processes);
@@ -40,9 +38,6 @@ sub kill_exists_ps {
         if ($line =~ /boidev/) {
             my @list = split(/\s+/, $line);
             push(@ps_list, $list[1]);
-#            print "User : $list[0]\n";
-#            print "Number Proccess : $list[1]\n";
-#            print "Time : $list[4]\n";
         }
     }
     my $curr_pid = max(@ps_list);
