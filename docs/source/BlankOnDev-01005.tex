@@ -1,0 +1,52 @@
+\documentclass[12pt,a4paper]{report}
+
+%% packages :
+\input{settings/packages}
+
+%% Macros Helper :
+\input{settings/marcos}
+
+%% Layout Settings :
+\input{settings/layout}
+
+%% Layout for Title Pages :
+\input{settings/titlepage_layout}
+
+%% Hyphenation Settings :
+\input{settings/hyphenation}
+
+\graphicspath{img/}
+
+\begin{document}
+
+	%\begin{titlingpage} %This starts the title page
+	%	\begin{center}
+	%		\includegraphics[height=2cm]{logo.png}\\ %Put the logo you want here
+	%		\vspace{4cm} %You can control the vertical distance
+	%		\begin{large}
+	%			\textbf{\thetitle} \\
+	%		\end{large}
+	%		\theauthor\\
+	%		\vspace{7cm} %Put the distance you need.
+	%		\thedate
+	%	\end{center}
+	%\end{titlingpage}
+
+	%% Cover
+	\pagestyle{empty}
+	\input{chapters/0_titlepage.tex}
+	\clearpage
+
+	%% Table of Content :
+	\pagenumbering{roman}
+	\tableofcontents
+	\addcontentsline{toc}{chapter}{Daftar Isi}
+	\clearpage
+
+	%% Bab 1 - Pengenalan
+	\input{chapters/1_pengenalan.tex}
+
+	%% Bab 2 - Fungsi Command "boidev"
+	\input{chapters/2_persiapan_implementasi.tex}
+
+\end{document}
