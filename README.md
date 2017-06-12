@@ -13,6 +13,39 @@ Untuk petunjuk penggunaan dapat Anda lihat di
 Untuk melakukan instalasi dapat dilakukan dengan cara manual
 atau install melalui CPAN.
 
+## Prepare Install :
+Proses ini untuk kebutuhan Generate Key GnuPG agar proses `Gain Enough Entropy` bisa lebih cepat.
+
+Install paket "rng-tools"
+    
+    apt-get install rng-tools 
+
+Edit File "/etc/default/rng-tools", dan tambahkan script `HRNGDEVICE=/dev/urandom`
+seperti berikut :
+
+    # Configuration for the rng-tools initscript
+    # $Id: rng-tools.default,v 1.1.2.5 2008-06-10 19:51:37 hmh Exp $
+    
+    # This is a POSIX shell fragment
+    
+    # Set to the input source for random data, leave undefined
+    # for the initscript to attempt auto-detection.  Set to /dev/null
+    # for the viapadlock driver.
+    #HRNGDEVICE=/dev/hwrng
+    #HRNGDEVICE=/dev/null
+    HRNGDEVICE=/dev/urandom
+    
+    # Additional options to send to rngd. See the rngd(8) manpage for
+    # more information.  Do not specify -r/--rng-device here, use
+    # HRNGDEVICE for that instead.
+    #RNGDOPTIONS="--hrng=intelfwh --fill-watermark=90% --feed-interval=1"
+    #RNGDOPTIONS="--hrng=viakernel --fill-watermark=90% --feed-interval=1"
+    #RNGDOPTIONS="--hrng=viapadlock --fill-watermark=90% --feed-interval=1"
+    
+Start service "rng-tools" :
+    
+    /etc/init.d/rng-tools start
+
 ## Manual Install
 
 ### Install dependensi :
