@@ -8,7 +8,7 @@ use BlankOnDev::Rilis;
 use BlankOnDev::DateTime;
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Subroutine for form time zone :
 # ------------------------------------------------------------------------
@@ -184,12 +184,12 @@ sub form_email_gpg {
             $data_emailGnuPG = $emailGnuPG_form;
         } else {
             print "Please enter valid email address !!! \n";
-            form_email_git();
+            form_email_gpg();
         }
     } else {
         if ($email eq '') {
             print "your enter email is empty !!! \n";
-            form_email_git();
+            form_email_gpg();
         } else {
             $data_emailGnuPG = $email;
         }

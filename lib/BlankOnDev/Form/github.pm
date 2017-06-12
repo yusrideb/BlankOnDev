@@ -8,7 +8,7 @@ use BlankOnDev::Rilis;
 use BlankOnDev::command;
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Subroutine for config github :
 # ------------------------------------------------------------------------
@@ -87,11 +87,22 @@ sub form_config_github {
             exit 0;
         }
 
-        print "\n";
-        print "You want to clear cache ? [y or n]";
-        chomp($form_cache = <STDIN>);
-        if ($form_cache eq 'y' or $form_cache eq 'Y') {
-            system($gitCmd_authCache_clear);
+        # Check Data cache :
+        $read_fileCfg = BlankOnDev::Utils::file->read($home_dir."/.gitconfig");
+        if ($read_fileCfg =~ m/(helper)\s(\=)\s(.*)/) {
+            print "\n\n";
+            print "You want to clear cache usename and password ? [y or n] ";
+            chomp($form_cache = <STDIN>);
+            if ($form_cache eq 'y' or $form_cache eq 'Y') {
+                system($gitCmd_authCache_clear);
+            }
+        } else {
+            print "\n\n";
+            print "You want to cache username and password github ? [y or n] ";
+            chomp($form_cache = <STDIN>);
+            if ($form_cache eq 'y' or $form_cache eq 'Y') {
+                system("$gitCmd_authCache --timeout=86400");
+            }
         }
     }
 }

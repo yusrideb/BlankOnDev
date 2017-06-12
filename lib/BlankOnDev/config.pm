@@ -18,7 +18,7 @@ use BlankOnDev::Rilis;
 use BlankOnDev::command;
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Our vars :
 our $gencfg = {};
@@ -92,7 +92,11 @@ sub _general_config {
 
     # Get data release :
     my $data_rilis = BlankOnDev::Rilis::data();
-    my $form_rilis = BlankOnDev->FORM('rilis');
+#    my $form_rilis = BlankOnDev->FORM('rilis');
+    my $form_rilis = {
+        'result' => 1,
+        'data' => 'tambora',
+    };
     my $boi_rilis;
     if ($form_rilis->{'result'} == 1) {
         $boi_rilis = $form_rilis->{'data'};
@@ -481,7 +485,11 @@ sub boi_rilis {
 
     # Check Rilis Selection :
     if ($gencfg->{'rilis'} eq '') {
-        my $form_rilis = BlankOnDev->FORM('rilis', '');
+#        my $form_rilis = BlankOnDev->FORM('rilis', '');
+        my $form_rilis = {
+            'result' => 1,
+            'data' => 'tambora',
+        };
         my $boi_rilis;
         if ($form_rilis->{'result'} == 1) {
             $boi_rilis = $form_rilis->{'data'};
@@ -774,11 +782,10 @@ sub read_config_bzr2git {
     # For Release set :
     # ----------------------------------------------------------------
     if (exists $ARGV[0] and $ARGV[0] ne 'config') {
-        boi_rilis() if $gencfg->{'rilis'} eq '';
+        $gencfg->{'rilis'} = 'tambora' if $gencfg->{'rilis'} eq '';
         $rilisCfg = $gencfg->{'rilis'} if $gencfg->{'rilis'} ne '';
     } else {
         $rilisCfg = $gencfg->{'rilis'};
-        boi_rilis() if $gencfg->{'rilis'} eq '';
         $rilisCfg = $gencfg->{'rilis'} if $gencfg->{'rilis'} ne '';
     }
 
