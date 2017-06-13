@@ -3,9 +3,9 @@ use strict;
 use warnings FATAL => 'all';
 
 # Version :
-our $VERSION = '0.1004';;
+our $VERSION = '0.1005';;
 our $appVer = '0.1';
-our $SubVer = '04';
+our $SubVer = '0.4';
 
 # boidev.pl version :
 our $boidev_ver = '0.1001';
