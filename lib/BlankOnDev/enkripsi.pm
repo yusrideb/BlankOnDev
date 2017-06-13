@@ -10,7 +10,7 @@ use MIME::Base64 ();
 use BlankOnDev::Utils::Char;
 
 # Version :
-our $VERSION = $BlankOnDev::Version::VERSION;
+our $VERSION = '0.1005';
 
 # Subroutine for Web Encoder :
 # ------------------------------------------------------------------------
