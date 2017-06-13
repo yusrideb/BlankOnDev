@@ -162,12 +162,12 @@ sub bzr2git_action_migration {
         # Prepare Configure :
         my $prepare_config = prepare_config();
         $result_cfg = $prepare_config->{'bzr2git'}($result_cfg, $pkg_name, $action_branch, $action_bzrCgit, $action_gitpush, $action_check, $time_branch, $time_gitpush);
+
+        # Save configure :
+        my $saveConfig = save_newConfig();
+        $saveConfig->{'bzr2git'}($result_cfg);
         $i_p++;
     }
-
-    # Save configure :
-    my $saveConfig = save_newConfig();
-    $saveConfig->{'bzr2git'}($result_cfg);
 }
 # Subroutine for action migration one package  :
 # ------------------------------------------------------------------------
