@@ -71,7 +71,7 @@ sub form_config_github {
             print "You want to cache username and password github ? [y or n] ";
             chomp($form_cache = <STDIN>);
             if ($form_cache eq 'y' or $form_cache eq 'Y') {
-                system("$gitCmd_authCache --timeout=86400");
+                system("$gitCmd_authCache --timeout=864000");
             }
         }
 
@@ -101,7 +101,7 @@ sub form_config_github {
             print "You want to cache username and password github ? [y or n] ";
             chomp($form_cache = <STDIN>);
             if ($form_cache eq 'y' or $form_cache eq 'Y') {
-                system("$gitCmd_authCache --timeout=86400");
+                system("$gitCmd_authCache --timeout=864000");
             }
         }
     }
