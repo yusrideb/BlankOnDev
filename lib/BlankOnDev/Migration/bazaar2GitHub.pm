@@ -17,7 +17,7 @@ use BlankOnDev::Migration::bazaar2GitHub::github;
 use Text::SimpleTable::AutoWidth;
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Subroutine for get time :
 # ------------------------------------------------------------------------
@@ -1705,6 +1705,7 @@ sub _addpkg_file {
 
                 # Define scalar :
                 my $new_pkg;
+                my @list_pkg = ();
 
                 # Check Package Group :
                 my $pkg_group = $self->group_pkg($allconfig);
@@ -1750,6 +1751,7 @@ sub _addpkg_file {
                                     'group' => $input_group
                                 });
                             print "$new_pkg has success added. \n";
+                            push(@list_pkg, $lines);
                         } else {
                             print "$new_pkg is exists. \n";
                         }
@@ -1763,6 +1765,8 @@ sub _addpkg_file {
 
                     # CLose File :
                     close (FH);
+                    my $size_pkgs = scalar @list_pkg;
+                    print "\n $size_pkgs packages has added...\n"
                 }
                 elsif ($status_group == 2) {
 
@@ -1782,7 +1786,8 @@ sub _addpkg_file {
                                 'group' => $input_group
                             });
                         my $for_saveCfg;
-                        print "$lines\n";
+                        print "\"$lines\" has success added.\n";
+                        push(@list_pkg, $lines);
 
                         unless (exists $curr_data_pkg->{'group'}->{$input_group} && exists $curr_data_pkg->{'pkgs'}->{$lines}) {
                             $for_saveCfg = save_newConfig();
@@ -1792,6 +1797,8 @@ sub _addpkg_file {
 
                     # CLose File :
                     close (FH);
+                    my $size_pkgs = scalar @list_pkg;
+                    print "\n $size_pkgs packages has added...\n"
                 }
                 else {
                     print "\n";
