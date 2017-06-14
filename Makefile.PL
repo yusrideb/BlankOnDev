@@ -38,6 +38,7 @@ WriteMakefile(
         "Capture::Tiny" => 0,
         "Capture::Tiny::Extended" => 0,
         "UNIVERSAL::ref" => 0,
+        "IPC::Run" => 0,
         "parent" => 0
     },
     "TEST_REQUIRES" => {
