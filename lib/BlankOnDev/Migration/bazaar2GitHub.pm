@@ -70,10 +70,10 @@ sub action_re_migration {
                 print "[error] Action \"git check -> $pkg_name\" $action_check\n";
             }
         } else {
-            print "[error] Action \"re-git push -> $pkg_name\" | $action_branch\n";
+            print "[error] Action \"re-git push -> $pkg_name\" | $action_re_gtipush\n";
         }
     } else {
-        print "[error] Action \"bzr convert git -> $pkg_name\" | $action_branch\n";
+        print "[error] Action \"bzr convert git -> $pkg_name\" | $action_bzrCgit\n";
     }
 
     # Prepare Configure :
