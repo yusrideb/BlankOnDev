@@ -1,5 +1,5 @@
 # NAME
-**BlankOnDev** - Development tools for BlankOn GNU/Linux.
+**[BlankOnDev](https://metacpan.org/module/BlankOnDev)** - Development tools for BlankOn GNU/Linux.
 
 # DESCRIPTION
 
