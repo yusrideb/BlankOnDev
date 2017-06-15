@@ -5,7 +5,7 @@ use warnings FATAL => 'all';
 # Use Module :
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Subroutine for split character based character :
 # ------------------------------------------------------------------------

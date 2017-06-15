@@ -12,7 +12,7 @@ use BlankOnDev::command;
 use Capture::Tiny::Extended 'capture';
 
 # Version :
-our $VERSION = '0.1004';;
+our $VERSION = '0.1005';;
 
 # Subroutine for git remote :
 # ------------------------------------------------------------------------
@@ -117,11 +117,12 @@ sub git_push {
     $cmd_gitpush .= "$git_push; ";
     $cmd_gitpush .= "$git_checkout $rilis; ";
     $cmd_gitpush .= "$git_push_repo $rilis";
-#    system("cd $dirOfPkgs; $git_push");
+
     cmd_gitpush($locfile_outlogs, $locfile_errlogs, $dirOfPkgs, $cmd_gitpush);
 
     # Read File :
     my $read_file = BlankOnDev::Utils::file->read($log_gitpush);
+#    my $read_file = '';
     if ($read_file =~ m/(fatal)\:\s(.*)/) {
         if ($3 =~ m/origin/) {
             return 3;
@@ -141,13 +142,12 @@ sub git_push {
     }
     else {
         my $read_errfile = BlankOnDev::Utils::file->read($locfile_errlogs);
+#        my $read_errfile = '';
         if ($read_errfile =~ m/(new)\s(branch)/) {
             return 1;
-        }
-        elsif ($read_errfile =~ m/rejected/) {
+        } elsif ($read_errfile =~ m/rejected/) {
             return 3;
-        }
-        elsif ($read_errfile =~ m/(fatal)\:\s(.*)/) {
+        } elsif ($read_errfile =~ m/(fatal)\:\s(.*)/) {
             return 3
         } else {
             return 1;
@@ -203,7 +203,8 @@ sub gitpush_new {
 sub cmd_re_gitpush {
     my ($locfile_outlogs, $locfile_errlogs, $dirPkg_grp, $cmd_gitpush) = @_;
     my $command = "cd $dirPkg_grp; $cmd_gitpush";
-    my ($out, $err, $ret) = capture (
+
+    my ($stdout, $stderr, $ret) = capture (
         sub {
             return system($command);
         },
@@ -254,6 +255,7 @@ sub repush_git {
     my $git_push_force = $cmd_list->{'git'}->{'push-force'};
     my $git_checkout = $cmd_list->{'git'}->{'checkout'};
     my $git_push_repo = $cmd_list->{'git'}->{'push-repo'};
+    my @cmdGit = ();
     my $cmd_git = '';
     $cmd_git .= "$git_init; ";
 #    $cmd_git .= "$git_fetch; ";
@@ -267,6 +269,16 @@ sub repush_git {
     $cmd_git .= "$git_push_force; ";
     $cmd_git .= "$git_checkout $rilis; ";
     $cmd_git .= "$git_push_repo $rilis";
+    push @cmdGit, "cd $dirOfPkgs; ";
+    push @cmdGit, "$git_init; ";
+    push @cmdGit, "$git_resetHead; ";
+    push @cmdGit, "rm -rf .bzr; ";
+    push @cmdGit, "$git_add *; ";
+    push @cmdGit, "$git_remote $git_url/$pkg_name.git; ";
+    push @cmdGit, "$git_push; ";
+    push @cmdGit, "$git_push_force; ";
+    push @cmdGit, "$git_checkout $rilis; ";
+    push @cmdGit, "$git_push_repo $rilis";
     my $cmd_gitpush = "$cmd_git";
     my $cmd_gitpush_force = "cd $dirOfPkgs; $git_push_force";
 
@@ -453,6 +465,14 @@ sub bzr2git_gitpush {
     $cmd_gitpush .= "$git_push; ";
     $cmd_gitpush .= "$git_checkout $build_rilis; ";
     $cmd_gitpush .= "$git_push_repo $build_rilis";
+
+    my $cloneurl = 'https://github.com/plack/Plack.git';
+
+    my($stderr,$stdout);
+    my @cmd = (qw/ git clone /, $cloneurl);
+
+    my $success = IPC::Run::run \@cmd, '>', \$stdout, '2>pty>', \$stderr;
+
     cmd_gitpush($locfile_outlogs, $locfile_errlogs, $dirOfPkgs, $cmd_gitpush);
 
     # Read File :

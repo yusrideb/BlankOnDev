@@ -10,7 +10,7 @@ use base 'BlankOnDev::DateTime::lang';
 #use vars qw($language $date_lang);
 
 # Version :
-our $VERSION = '0.1004';;
+our $VERSION = '0.1005';;
 
 # scalar global :
 our ($language, $date_lang);

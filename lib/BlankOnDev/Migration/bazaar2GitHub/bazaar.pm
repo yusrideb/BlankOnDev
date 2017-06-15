@@ -10,7 +10,7 @@ use BlankOnDev::command;
 use Capture::Tiny::Extended 'capture';
 
 # Version :
-our $VERSION = '0.1004';;
+our $VERSION = '0.1005';;
 
 # Subrouitne for cmd bzr branch :
 # ------------------------------------------------------------------------

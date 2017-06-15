@@ -7,7 +7,7 @@ use BlankOnDev::DataDev;
 use BlankOnDev::Utils::file;
 
 # Version :
-our $VERSION = '0.1004';;
+our $VERSION = '0.1005';;
 
 # Subroutine for bzr branch :
 # ------------------------------------------------------------------------

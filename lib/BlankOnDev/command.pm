@@ -7,7 +7,7 @@ use Term::ReadKey;
 use BlankOnDev::Rilis;
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Subroutine for bazaar command :
 # ------------------------------------------------------------------------

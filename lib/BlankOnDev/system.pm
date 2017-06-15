@@ -8,7 +8,7 @@ use BlankOnDev::DateTime;
 use List::Util qw(max);
 
 # Version :
-our $VERSION = '0.1004';
+our $VERSION = '0.1005';
 
 # Subroutine for kill exists process :
 # ------------------------------------------------------------------------
