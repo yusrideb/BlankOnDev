@@ -86,6 +86,79 @@ Kemudian, Simpan file dan start service \textbf{rng-tools} seperti contoh perint
 sudo /etc/init.d/rng-tools start
 \end{lstlisting}
 
+\subsection{Membuat \textit{SSH Public key authentication} for Github}
+\noindent
+\normalsize
+Konfigurasi ini bertujuan agar pada saat push repositori ke Github tidak lagi harus memasukkan \texttt{Username} dan \texttt{Password} saat proses push repositori.
+
+\subsubsection{Membuat Public key SSH}
+\noindent
+Jalankan perintah \texttt{\textbf{ssh-keygen -t rsa}} seperti berikut :
+
+\begin{lstlisting}[language=ShellBash]
+$ ssh-keygen -t rsa -b 4096 -C "linuxer08@gmail.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/yusrideb/.ssh/id_rsa): 
+Created directory '/home/yusrideb/.ssh'.
+
+\end{lstlisting}
+\noindent
+Langsung Saja Tekan Enter pada Kedua form ini.
+
+\begin{lstlisting}[language=ShellBash]
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again: 
+\end{lstlisting}
+\begin{lstlisting}[language=ShellBash]
+Your identification has been saved in /home/yusrideb/.ssh/id_rsa.
+Your public key has been saved in /home/yusrideb/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:KkcuVZ/vd9mbbtU0w62ThEqa/63ZrdV762h9SIfeRys linuxer08@gmail.com
+The key's randomart image is:
++---[RSA 2048]----+
+|                 |
+|                 |
+|        .    .. .|
+|       . .... .+o|
+|      o S+o. . =+|
+|     + .o ..  * *|
+|    o +  .  .o.*B|
+|     +    .. E=BX|
+|           .*+OXB|
++----[SHA256]-----+
+\end{lstlisting}
+
+\pagebreak
+\subsubsection{Menambahkan SSH Key di Akun Github}
+
+\begin{multicols}{2}
+[
+\noindent
+Pada bagian ini sebagai contoh file \textit{Public Key SSH} berada di\\ \texttt{/home/yusrideb/.ssh/id\_rsa.pub}\\
+Setelah itu, masuk ke akun github dan lakukan pengaturan di bagian \textit{SSH and GPG Keys} untuk menanbahkan \textit{SSH Key} pada \textbf{Github} dengan isi dari file\\ \texttt{/home/yusrideb/.ssh/id\_rsa.pub}, seperti berikut :
+]
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=7cm]{add-ssh-key-on-gtihub.png}
+	\caption{Menambahkan \textit{Public SSH Key} di Akun Github}
+	\label{fig:bab2_add-ssh-key-on-github}
+\end{figure}
+
+\begin{enumerate}
+	\item Klik \textbf{SSH and GPG Keys}
+	
+	\item Klik \textbf{New SSH Key}
+	
+	\item Masukkan Nama \textit{SSH Key}, contohnya \textbf{My\_SSH\_key}
+	
+	\item Masukkan isi file \texttt{id\_rsa.pub} ke dalam form input \textbf{Key},
+	Setelah itu klik \textbf{Add SSH Key}.
+	
+	\item Hasil akan tampil di Daftar \textbf{SSH Keys} seperti yang ditunjukkan oleh \textit{gambar \ref{fig:bab2_add-ssh-key-on-github}} di samping.
+\end{enumerate}
+
+\end{multicols}
+
 \subsection{Metode Instalasi secara Manual}
 \noindent
 Instalasi manual untuk Module Perl \textbf{BlankOnDev} yang dimaksud disini yaitu instalasi dari Source Module CPAN yang dapat didownload pada halaman : \\ \footnotesize{\url{https://metacpan.org/release/BlankOnDev}} atau \\
@@ -93,6 +166,7 @@ Instalasi manual untuk Module Perl \textbf{BlankOnDev} yang dimaksud disini yait
 
 \subsubsection{Install Dependensi Module}
 \noindent
+\normalsize
 Jika versi \textbf{BlankOnDev Toos} yang terbaru sudah pernah di install sebelumnya, maka \textit{Dependensi} tidak pernah di install lagi.
 
 \begin{lstlisting}[language=ShellBash]
@@ -105,7 +179,6 @@ sudo cpan -i Capture::Tiny::Extended UNIVERSAL::ref parent
 
 \subsubsection{Install Module Perl}
 \noindent
-\normalsize
 Download Source dari halaman {\url{https://metacpan.org/release/BlankOnDev}, 
 Contoh file source : "\textbf{BlankOnDev-0.1005.tar.gz}"
 
@@ -147,7 +220,7 @@ Jika sebelumnya anda sudah menggunakan perintah \textbf{\texttt{cpan -i}} maka i
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=9cm]{install-from-cpan-2.png}
+	\includegraphics[width=10cm]{install-from-cpan-2.png}
 	\caption{Instalasi Module Perl di mulai}
 	\label{fig:bab2_start_install_module}
 \end{figure}
@@ -157,12 +230,11 @@ Jika dalam proses instalasi tidak ada yang bermasalah, maka akhir dari proses in
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=9cm]{install-from-cpan-3_finish.png}
+	\includegraphics[width=12cm]{install-from-cpan-3_finish.png}
 	\caption{Instalasi Module Selesai}
 	\label{fig:bab1_finish_install_module}
 \end{figure}
 
-\pagebreak
 \section{Implementasi}
 \label{subsec:implm}
 \noindent
@@ -183,10 +255,10 @@ Pada bagian ini akan dijelaskan langkah-langkah penggunaan perintah \textbf{boid
 	\begin{itemize}
 		\item Config github, seperti \textit{nama}, \textit{Alamat Email}, dan \textit{Cache Username dan Password}
 		
-		\item Opsi Generate Key GnuPG.
+		\item Opsi Generate Key GnuPG.\\
 		
-		\item Memasukkan alamat bazaar repositori\\ (example: \textbf{http://dev.blankonlinux.or.id/browser/tambora}).
-		
+		\item Memasukkan alamat bazaar repositori\\ (example: \textbf{http://dev.blankonlinux.or.id/browser/tambora})
+
 		\item Memasukkan alamat github repositori\\ (example: \textbf{https://github.com/blankon-packages})	
 	\end{itemize}
 	
@@ -229,7 +301,6 @@ $ boidev config
 Kemudian proses \texttt{apt-get update} akan berjalan seperti berikut :
 
 \begin{lstlisting}[language=ShellBash]
-
 Hit:1 http://repo.ridon.id/blankon tambora InRelease
 Hit:2 http://repo.ridon.id/blankon tambora-updates InRelease
 Hit:3 http://repo.ridon.id/blankon tambora-security InRelease
@@ -239,7 +310,7 @@ Reading package lists... Done
 \end{lstlisting}
 
 \noindent
-Setelah proses diatas maka akan di install beberapa paket-paket yang dibutuhkan oleh \textbf{Tim Pemaket}. Setelah instalasi paket selesai, Kemudian akan tampil Form seperti berikut dan masukkan nomor sesuai dengan yang ada di \textbf{List}.
+Setelah proses diatas maka akan di install beberapa paket-paket yang dibutuhkan oleh \textbf{Tim Pemaket} selesai terinstalasi. Kemudian akan tampil Form seperti berikut dan masukkan nomor sesuai dengan yang ada di \textbf{List}.
 
 \begin{lstlisting}[language=ShellBash]
 
@@ -269,11 +340,6 @@ Enter your email address for GnuPG Generate Key : yusrideb@cpan.org
 # Masukkan Passphrase seperti saat menjalankan gpg --gen-key
 Enter Passphrase gpg : 
 
-# Untuk Cache username dan password github
-# setelah username dan password dimasukkan pada saat 
-# proses "git push"
-You want to cache username and password github ? [y or n] y
-
 \end{lstlisting}
 
 \subsection{Dengan perintah \texttt{boidev mig\_prepare}}
@@ -290,9 +356,9 @@ $ boidev mig_prepare
 \begin{lstlisting}[language=ShellBash]
 
 List TimeZone : 
-1. WIB 
-2. WITA 
-3. WIT 
+1. WIB
+2. WITA
+3. WIT
 Enter your time zone [WITA] : 2
 
 \end{lstlisting}
@@ -317,39 +383,15 @@ You want reconfig github [y/n]:
 	# Masukkan email github, jika ingin mengubah nama yang sudah
 	# tersimpan pada system. Jika tidak langsung tekan Enter
 	Enter your github email [linuxer08@gmail.com] : 
-	
-	# Jika cache sudah aktif, maka form berikut akan tampil
-	# jika cache belum aktif, maka form yang tampil yaitu :
-	# "You want cache user and password git [y/n]:"
-	# 
-	# Jawaban hanya "y" or "n", jika dikosongkan 
-	# maka sama dengan "n"
-	You want to clear [y/n] : 
 	\end{lstlisting}
 	
 	\item Jika inputnya \textbf{\texttt{n}} maka akan dilanjutkan ke form berikutnya.
 \end{itemize}
 
-\noindent
-Form berikut yaitu form \textbf{Github config} clear cache atau aktifkan cache username dan passowrd github:
-
-\begin{itemize}
-	\item Jika cache aktif :
-	\begin{lstlisting}[language=ShellBash]
-	Cache user and password is activated
-	You want to clear [y/n] : 
-	\end{lstlisting}
-	
-	\item Jika cache belum aktif :
-	\begin{lstlisting}[language=ShellBash]
-	You want cache user and password git [y/n]: 
-	\end{lstlisting}
-\end{itemize}
-
 \subsubsection{Form GnuPG Generate Key :}
 
 \begin{lstlisting}[language=ShellBash]
-You want cache user and password git [y/n]: 
+You want GnuPG Generate key [y/n]: 
 \end{lstlisting}
 
 \begin{itemize}
@@ -365,10 +407,16 @@ You want cache user and password git [y/n]:
 	Enter E-mail [yusrideb@cpan.org] : 
 	\end{lstlisting}
 	
-	Setelah form disini, maka akan tampilk hasil \textbf{Generate Key GnuPG} :
+	Setelah form diatas, maka akan tampil form untuk mengubah \textit{passphrase GnuPG} atau tidak, Jika jawabannya "\texttt{\textbf{y}}" maka akan tampil form untuk memasukkan passphrase, jika tidak, maka proses \textbf{Generate Key GnuPG} akan dilanjutkan.
 	
 	\begin{lstlisting}[language=ShellBash]
-	You want to enter different passphrase GnuPG ? [y or n] y
+	You want to enter different passphrase GnuPG ? [y or n] n
+	\end{lstlisting}
+	
+	\noindent
+	Setelah form diatas, maka akan tampil hasil \textbf{Generate Key GnuPG} :
+	
+	\begin{lstlisting}[language=ShellBash2]
 	Enter passphrase : pub   1024R/243741DF 2017-06-12
 	Key fingerprint = 8891 3EF3 6E21 C298 B7B6  0F0A 1380 3397 2437 41DF
 	uid                  Achmad Yusri Afandi <yusrideb@cpan.org>
@@ -379,6 +427,7 @@ You want cache user and password git [y/n]:
 	
 \end{itemize}
 
+\pagebreak
 \subsubsection{Form URL Repositori Bazaar dan Github :}
 
 \begin{itemize}
@@ -392,7 +441,7 @@ You want cache user and password git [y/n]:
 	Enter bzr url : 
 	
 	# Masukkan URL repositori Github, contohnya :
-	# https://github.com/blankon-packages
+	# git@github.com:blankon-packages
 	#
 	Enter git url : 
 	
@@ -410,7 +459,7 @@ You want cache user and password git [y/n]:
 	# Masukkan URL  URL repositori github jika anda ingin 
 	# mengubah alamatnya. Jika tidak, langsung saja tekan Enter.
 	#
-	Enter git url [https://github.com/blankon-packages] : 
+	Enter git url [git@github.com:blankon-packages] : 
 	
 	\end{lstlisting}
 	
@@ -424,7 +473,7 @@ Seperti yang telah dijelaskan pada upabab \textit{\ref{subsec:implm}. Implementa
 \subsubsection{Menambahkan Group Paket}
 \label{subsubsec:addpkg-group}
 \noindent
-Untuk menambahkan group paket ikut perintah berikut :
+Untuk menambahkan group paket gunakan perintah berikut :
 
 \begin{lstlisting}[language=ShellBash]
 $ boidev bzr2git addpkg-group 
@@ -547,7 +596,7 @@ Daftar nama paket tersebut dimasukkan kedalam file yang berekstensi \textbf{.boi
 
 \noindent
 Setelah daftar \textit{nama paket} dimasukkan dalam file, kemudian jalankan perintah berikut dengan syntax :\\ {\small \texttt{boidev bzr2git addpkg-file <lokasi\_file\/nama\_file.bokg>}}\\
-Contoh lokasi file di : {\small \texttt{\/home\/yusrideb\/github-6.boikg}}
+Contoh lokasi file di : {\small \texttt{/home/yusrideb/github-6.boikg}}
 
 \begin{lstlisting}[language=ShellBash]
 $ boidev bzr2git addpkg-file /home/yusrideb/github-6.boikg
@@ -637,7 +686,7 @@ Output :
 \section{Proses Migrasi Paket}
 \label{sec:pre_impl_pros_mig}
 \noindent
-Proses yang dilakukan disini yaitu penggunaan perintah-perintah seperti contoh berikut, dengan perintah \textbf{boidev} yang lebih aman untuk meminimalisir kesalahan penulisan perintah ataupun kesalahan penulisan \textit{nama paket}.
+Proses yang dilakukan disini yaitu penggunaan perintah-perintah seperti contoh berikut. Perintah \textbf{boidev} bertujuan untuk meminimalisir kesalahan penulisan perintah ataupun kesalahan penulisan \textit{nama paket}.
 
 \begin{lstlisting}[language=ShellBash2, caption=Perintah Migrasi, label=lst:migrasi_manual]
 
@@ -685,7 +734,6 @@ You want to re-branch if packages is exists on local directory [y/n] : y
 
 Branch : "gnome-screensaver"
 Result Action branch : 1
-
 
 Branch : "gnome-icon-theme"
 Result Action branch : 1
@@ -808,20 +856,12 @@ Enter Number choice : 1
 
 Push to github .... 
 
+# Jika tampil form seperti berikut
+# masukkan passphrase yang digunakan saat membuat
+# Public SSH Key :
+Enter passphrase for key '/home/yusrideb/.ssh/id_rsa': 
 
 gitpush : gnome-music
-
-# Masukkan Username dan password github
-#
-Username for 'https://github.com': yusrideb
-Password for 'https://yusrideb@github.com': 
-
-\end{lstlisting}
-
-\noindent
-Jika username dan password github di cache sebelumnya, maka proses berikutnya tidak akan lagi meminta untuk memasukkan \textit{username dan password}.
-
-\begin{lstlisting}[language=ShellBash2]
 Action Git push for packages gnome-music : 1 
 gitpush : gnome-software
 Action Git push for packages gnome-software : 1 
@@ -957,9 +997,14 @@ Enter packages name : gnome-keyring
 
 Branch : "gnome-keyring"
 [success] Action "bzr branch -> gnome-keyring" : 1
-[success] Action "bzr convert git -> gnome-keyring" 1
-Username for 'https://github.com': yusrideb
-Password for 'https://yusrideb@github.com': 
+[success] Action "bzr convert git -> gnome-keyring" 1 
+
+
+# Jika tampil form seperti berikut
+# masukkan passphrase yang digunakan saat membuat
+# Public SSH Key :
+Enter passphrase for key '/home/yusrideb/.ssh/id_rsa': 
+
 [success] Action "git push -> gnome-keyring" 1
 [success] Action "git check -> gnome-keyring" repo_github = master, tambora
 

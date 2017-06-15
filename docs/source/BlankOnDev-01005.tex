@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[a4paper,12pt]{report}
 
 %% packages :
 \input{settings/packages}
@@ -15,22 +15,12 @@
 %% Hyphenation Settings :
 \input{settings/hyphenation}
 
-\graphicspath{img/}
+%% Listing code Languages Settings :
+\input{settings/language}
+\graphicspath{{img/}}
 
 \begin{document}
-
-	%\begin{titlingpage} %This starts the title page
-	%	\begin{center}
-	%		\includegraphics[height=2cm]{logo.png}\\ %Put the logo you want here
-	%		\vspace{4cm} %You can control the vertical distance
-	%		\begin{large}
-	%			\textbf{\thetitle} \\
-	%		\end{large}
-	%		\theauthor\\
-	%		\vspace{7cm} %Put the distance you need.
-	%		\thedate
-	%	\end{center}
-	%\end{titlingpage}
+	\pagenumbering{roman}
 
 	%% Cover
 	\pagestyle{empty}
@@ -38,15 +28,29 @@
 	\clearpage
 
 	%% Table of Content :
-	\pagenumbering{roman}
+	\pagestyle{fancy}
+	\fancyhf{}
+	\fancyhead[LE]{\thepage}
+	\fancyhead[RO]{\thepage}
+	\fancyhead[RE]{\nouppercase{\textbf{\leftmark}}}
+	\fancyhead[LO]{\textbf{Tutorial BlankOnDev version 0.1005}}
+	\setlength{\parindent}{1cm}
+	\setlength{\parskip}{0.25cm}
+	\phantomsection
 	\tableofcontents
 	\addcontentsline{toc}{chapter}{Daftar Isi}
 	\clearpage
-
+%	\SetWatermarkText{\includegraphics[width=9cm]{logo.png}}
 	%% Bab 1 - Pengenalan
 	\input{chapters/1_pengenalan.tex}
 
 	%% Bab 2 - Fungsi Command "boidev"
 	\input{chapters/2_persiapan_implementasi.tex}
+	
+	%% Bab 3 - troubleshooting Migrasi Paket Migrasi Paket
+	\input{chapters/3_troubleshooting_migrasi.tex}
+	
+	%% Appendix
+	\input{chapters/4_appendix.tex}
 
 \end{document}
