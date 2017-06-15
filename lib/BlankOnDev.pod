@@ -1,6 +1,6 @@
 =head1 NAME
 
-BlankOnDev - Development tools for BlankOn GNU/Linux. [testing]
+BlankOnDev - Development tools for BlankOn GNU/Linux. [stable]
 
 =head1 DESCRIPTION
 
