@@ -5,7 +5,7 @@
 
 BlankOnDev merupakan tools untuk memudahkan pengembang BlankOn untuk melakukan 
 beberapa aktifitas yang terkait dengan pengembangan BlankOn.
-Untuk petunjuk penggunaan dapat Anda lihat di 
+Untuk petunjuk penggunaan yang lebih lengkap dapat Anda lihat di 
 [BlankOnDev::Tutorial::id](https://metacpan.org/pod/distribution/BlankOnDev/lib/BlankOnDev/Tutorial/id.pod). 
 atau [Download Tutorial PDF](https://yusrideb.github.io/BlankOnDev/docs/Tutorial-BlankOnDev-01005.pdf)
 
