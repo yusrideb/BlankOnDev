@@ -2173,6 +2173,10 @@ sub list_pkg_by_group {
 sub _list_pkg {
     my ($self, $allconfig) = @_;
 
+    # Define scalar :
+    my $date_branch;
+    my $date_gitpush;
+
     # For All config :
     my $curr_build = $allconfig->{'build'};
     my $buld_rilis = $curr_build->{'rilis'};
@@ -2236,14 +2240,15 @@ sub _list_pkg {
                             my $curr_grpname = $list_all_pkg[$i_p]->{'group'};
                             my $pkg_name = $list_all_pkg[$i_p]->{'name'};
                             my $date_add = $list_all_pkg[$i_p]->{'date-add'};
-                            my $date_branch = $list_all_pkg[$i_p]->{'date-branch'} eq '' ? '-' : $list_all_pkg[$i_p]->{'date-branch'};
-                            my $date_gitpush = $list_all_pkg[$i_p]->{'date-gitpush'} eq '' ? '-' : $list_all_pkg[$i_p]->{'date-gitpush'};
+                            $date_branch = exists $list_all_pkg[$i_p]->{'date-branch'} && $list_all_pkg[$i_p]->{'date-branch'} eq '' ? '-' : $list_all_pkg[$i_p]->{'date-branch'};
+                            $date_gitpush = exists $list_all_pkg[$i_p]->{'date-gitpush'} && $list_all_pkg[$i_p]->{'date-gitpush'} eq '' ? '-' : $list_all_pkg[$i_p]->{'date-gitpush'};
                             my $status_branch = $list_all_pkg[$i_p]->{'status'}->{'bzr-branch'};
                             my $status_gitpush = $list_all_pkg[$i_p]->{'status'}->{'git-push'};
                             my $status_gitCgit = $list_all_pkg[$i_p]->{'status'}->{'bzrConvertGit'};
                             my $status = "bzrBranch = $status_branch, bzrConvertGit = $status_gitCgit, gitPush = $status_gitpush";
                             my $status_ongit = exists $list_all_pkg[$i_p]->{'status'}->{'ongit'} ? $list_all_pkg[$i_p]->{'status'}->{'ongit'} : '';
                             my @data_rows = ($num, $curr_grpname, $pkg_name, $date_add, $date_branch, $date_gitpush, $status, $status_ongit);
+#                            my @data_rows = ($num, $curr_grpname, $pkg_name, $date_add, '-', '-', $status, $status_ongit);
                             $textTbl->row(@data_rows);
                             $i_p++
                         }
