@@ -1,0 +1,232 @@
+%% For Page Style :
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\thepage}
+\fancyhead[RO]{\thepage}
+\fancyhead[RE]{\nouppercase{\textbf{\leftmark}}}
+\fancyhead[LO]{\textbf{Tutorial BlankOnDev version 0.1005}}
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0.25cm}
+
+%% Format Chapter
+\definecolor{RoyalRed}{RGB}{157,16, 45}
+\chapterfont{\fontfamily{bch}\fontseries{b}\selectfont}
+
+\titleformat{\chapter}[display]
+{\normalfont\bfseries\filcenter}
+{\LARGE}
+{1ex}
+{\titlerule[2pt]
+	\textbf{{\LARGE \thechapter} \hspace{1mm}\textbf{{\LARGE |}}}
+	\hspace{1mm}%
+	\LARGE}
+[\vspace{1ex}%
+{\titlerule[2pt]}]
+
+\chapter{Pengenalan}
+
+%% Page Numbering for chapter :
+\pagenumbering{arabic}
+
+\section{Apa itu BlankOnDev ?}\label{sec:what_blankondev}
+\noindent
+\textbf{BlankOnDev} merupakan Tools untuk melakukan aktifitas sebagai pengembang GNU/Linux BlankOn.
+Terdapat beberapa pekerjaan sebagai pengembang BlankOn khususnya untuk \textbf{Tim Pemaket} yang dilakukan dengan cara manual menggunakan beberapa perintah Linux, yang menurut penulis cukup tradisional.
+
+\noindent
+Pada tools \textbf{BlankOnDev} \textit{rencana} akan memiliki beberapa fitur untuk mempermudah pekerjaan Tim Pemaket meliputi :
+\begin{enumerate}
+	\item Manajemen pengaturan repositori pada Sistem Linux Pemaket
+	
+	\item Persiapan Sistem Linux Pemaket sebelum melakukan aktifitas pemaket.
+	
+	\item System manajemen builder Paket dari Source menjadi file \textbf{.deb} yang siap untuk di install dengan perintah \texttt{dpkg -i <file\_packages.deb>}.
+	
+	\item Melakukan patching atau perbaikan bugs yang terpadat pada paket-paket tertentu.
+	
+	\item Membuat format paket debian yang nantinya akan diteruskan ke server \textbf{irgsh}\footnote{\textbf{irgsh} merupakan mesin builder paket BlankOn GNU/Linux} untuk dilakukan proses build source menjadi paket debian yaitu file \textbf{.deb}, yang kemudian akan di dorong ke \textbf{reprepo}\footnote{\textbf{reprepo} merupakan tool untuk menangani local repositori}.
+	
+	\item Migrasi data paket debian yang sebelumnya tersimpan dalam server bazaar repository ke server github repository.
+	
+	\item Sistem pembuatan Repositori mirror secara otomatis dengan sistem singkronisasi yang tercontrol.
+\end{enumerate}
+
+\noindent
+Fitur \textbf{BlankOnDev v0.1005} yang sudah rampung dan siap untuk digunakan :
+\begin{itemize}
+	\item Fitur Migrasi data paket debian yang sebelumnya tersimpan pada server bazaar ke server github repository.
+\end{itemize}
+
+\section{Mengapa BlankOnDev Harus dibuat ?}\label{sec:why}
+\noindent
+Ada beberapa aktifitas yang mememakan banyak waktu jika harus dilakukan dengan cara tradisional di Sistem Operasi GNU/Linux. GNU/Linux BlankOn merupakan Distribusi Linux turunan Debian GNU/Linux, dengan basis Debian GNU/Linux sebenarnya sudah memberikan banyak kemudahan dalam penggunaannya, akan tetapi tetap memakan waktu yang banyak. Sedangkan ada hal yang lebih penting daripada sekedar menjalankan perintah linux satu per satu yaitu Kestabilan dari Distribusi Sistem Operasi GNU/Linux. 
+
+\noindent
+Berikut beberapa kasus yang menginspirasi penulis untuk membuat Tools dengan nama \textbf{BlankOnDev}, yaitu :
+\begin{itemize}
+	\item Konfigurasi sistem lokal pemaket sebelum melakukan aktifitas pemaket, ini juga harus dilakukan banyak percobaan untuk menghasilkan konfigurasi yang stabil.
+	
+	\item Sistem kontrol server repositori yang menurut penulis masih perlu diperbaiki untuk mencegah terjadi permasalahan di server repositori GNU/Linux BlankOn. Dan ketika terjadi permasalahan dapat diselesaikan dalam kurung waktu sangat singkat.
+	
+	\item Build Paket di mesin lokal Pemaket. Aktifitas ini, juga bisa dikatakan sangat panjang jika terjadi permasalahan seperti patch bugs paket BlankOn. Aktifitas build tanpa adanya permasalahan juga akna sangat panjang, jika Pemaket harus menentukan versi paket yang akan dipaketkan atau melakukan uji coba terhadap versi paket sebelum di dorong ke \textbf{irgsh}.
+	
+	\item Build paket beserta dependensi paket. Setiap paket utama yang akan dibuild tentunya memiliki dependensi atau dalam artian adanya keterkaitan antar paket lainnya. Agar paket utama yang dibuild dapat stabil saat installasi maupun penggunaannya, maka dependensi paket juga harus sama stabilnya. Kemudian, jika hal ini dilakukan secara manual oleh pemaket, maka pasti akan memakan banyak waktu. (Lihat \hyperref[text:apt-rdepends]{\textbf{apt-rdepends}})
+	
+	\item Pengaturan repositori di sistem pemaket, proses penggantian alamat Repositori masih tergolong manual, karena harus mengedit file konfigurasi di \texttt{/etc/apt/sources.list}. Jika hanya sebagai pengguna biasa ini tidak masalah. Namun untuk pengembang ini sangat banyak makan waktu ketika harus melakukan pengujian terhadap repositori.
+	
+	\item Proses pencarian source sebelum build paket. Ini juga akan memakan banyak waktu untuk mencari source paket yang sesuai dari beberapa repositori Debian GNU/Linux maupun turunannya.
+\end{itemize}
+
+\noindent
+Selain butir-butir diatas penulis juga terinspirasi dengan \textbf{Debian Manifasto} yang di tulis oleh \textit{Ian A. Murdock}, sebagai konstruksi awal dari pengembangan Debian GNU/Linux. Dan juga menjadi landasan pengembangan \textit{BlankOnDev Tools}. (Lihat \hyperref[appdx::deb_manifesto]{\textbf{Debian Manifesto}} di \textit{Halaman \pageref{appdx::deb_manifesto}})
+
+\section{Teknologi yang digunakan oleh BlankOnDev}\label{sec:tekno}
+\noindent
+Pengembangan \textit{BlankOnDev tools} menggunakan bahasa pemrogram \textbf{Perl} demi kemudahan penulis untuk membuat beberapa tools, apalagi Perl sangat powerful untuk pemrograman text. 
+
+\noindent
+Terdapat beberapa paket-paket Debian yang masih menggunakan \textit{Perl} sampai saat ini, seperti beberapa tools \textit{dpkg}, \textit{apt} dan masih banyak lagi tool-tool yang selama ini sering digunakan dan dibuat dengan bahasa pemrograman \textbf{Perl}. 
+
+\noindent
+\textit{Perl philosophy : "Kami dapat mengajari Anda bagaimana kami melukis, tapi kami tidak dapat mengajari Anda bagaimana Anda melukis"}
+
+\noindent
+Prototype \textbf{apt-get} dan \textbf{aptitude} juga awalanya menggunakan bahasa pemrogram Perl yang kemudian ditulis ulang ke C/C++. Tools \textbf{tasksel} yang berjalan pada instalasi mode text Debian GNU/Linux dan juga bisa dijalakan setelah instalasi, masih menggunakan Perl. Beberapa hal ini juga menjadi alasan penulis untuk membuat program BlankOnDev dengan bahasa pemrogram perl. Konsep seperti tool \textbf{tasksel} yang akan digunakan oleh penulis kedepannya untuk memenuhi seluruh daftar fitur yang disebutkan pada \textit{Tutorial} ini.
+
+\noindent
+Salah satu tools Debian yang digunakan untuk melihat semua dependensi terhadap suatu paket tertentu yaitu \textbf{apt-rdepends}. output dari tools dari \texttt{apt-rdepends} seperti berikut :\label{text:apt-rdepends}
+\pagebreak
+\begin{lstlisting}[language=ShellBash]
+$ apt-rdepends tar
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+tar
+	PreDepends: libacl1 (>= 2.2.51-8)
+	PreDepends: libc6 (>= 2.17)
+	PreDepends: libselinux1 (>= 1.32)
+libacl1
+	Depends: libattr1 (>= 1:2.4.46-8)
+	Depends: libc6 (>= 2.14)
+	PreDepends: multiarch-support
+libattr1
+	Depends: libc6 (>= 2.4)
+	PreDepends: multiarch-support
+libc6
+	Depends: libgcc1
+libgcc1
+	Depends: gcc-4.9-base (= 4.9.2-10)
+	Depends: libc6 (>= 2.14)
+	PreDepends: multiarch-support
+gcc-4.9-base
+multiarch-support
+	Depends: libc6 (>= 2.3.6-2)
+libselinux1
+	Depends: libc6 (>= 2.14)
+	Depends: libpcre3 (>= 8.10)
+	PreDepends: multiarch-support
+libpcre3
+	Depends: libc6 (>= 2.14)
+	PreDepends: multiarch-support
+\end{lstlisting}
+
+\noindent
+Tool \texttt{apt-rdepends} juga merupakan tools yang sangat memudahkan dalam pencarian dependensi suatu paket tertentu. Tool ini juga akan menjadi sumber informasi untuk pembuatan fitur Build paket di program \textbf{BlankOnDev}.
+
+\section{List Command}
+\noindent
+Daftar perintah pada program \textbf{BlankOnDev} terdiri dari 2 bagian yaitu :
+\begin{itemize}
+	\item Perintah untuk konfigurasi program
+	\item Perintah untuk Migrasi Paket.
+\end{itemize}
+
+\subsection{Perintah Konfigurasi Program}
+\noindent
+Bagian ini terdiri dari 10 Perintah yaitu :
+\begin{enumerate}
+	\item Perintah \texttt{\textbf{boidev config}} - Perintah ini digunakan untuk melakukan pengaturan sebelum penggunaan program lebih lanjut.
+	
+	\item Perintah \texttt{\textbf{boidev mig\_prepare}} - Perintah ini digunakan persiapan sebelum melakukan migrasi paket, seperti \textbf{url branch}, \textbf{url github}, \textbf{email github}, dan data untuk proses Generate key dengan \textbf{GnuPG}.
+	
+	\item Perintah \texttt{\textbf{boidev install-pkg}} - Perintah ini digunakan untuk instalasi beberapa paket debian yang dibutuhkan untuk Tim Pemaket.
+	
+	\item Perintah \texttt{\textbf{boidev gpg-auth}} dan \texttt{\textbf{boidev gpg-auth-dec}} - Perintah ini digunakan untuk melihat \textbf{nama}, \textbf{email} dan \textbf{passphrase} \textbf{GnuPG} yang digunakan untuk \textit{Generate Key}.
+	
+	\item Perintah \texttt{\textbf{boidev gpg-genkey}} - Perintah ini digunakan untuk melakukan \textit{Generate key GnuPG}
+	
+	\item Perintah \texttt{\textbf{boidev list-cfg}} - Perintah ini digunakan untuk melihat daftar konfigurasi program \textbf{BlankOnDev} yang telah dilakukan.
+	
+	\item Perintah \texttt{\textbf{boidev list-file}} - Perintah ini digunakan untuk melihat daftar file konfigurasi yang tersimpan pada sistem program \textbf{BlankOnDev}.
+	
+	\item Perintah \texttt{\textbf{boidev rilis}} - Perintah Ini digunakan untuk mengubah rilis \textbf{BlankOn} yang digunakan pada program \textbf{BlankOnDev}
+	
+	\item Perintah \texttt{\textbf{boidev -v}} atau \texttt{\textbf{boidev \Twomin{version}}} - Perintah ini digunakan untuk melihat versi tools \textbf{BlankOnDev}
+\end{enumerate}
+
+\subsection{Perintah Migrasi Paket}
+\noindent
+Bagian ini terdiri dari 17 Perintah yaitu :
+\begin{enumerate}
+	\item Perintah \texttt{\textbf{boidev bzr2git}} - Perintah ini merupakan perintah yang digunakan untuk melakukan Migrasi paket dari repositori \textbf{Bazaar} ke repositori \textbf{Github}
+	
+	\item Perintah \texttt{\textbf{boidev bzr2git addpkg-group}} - Perintah ini merupakan perintah yang digunakan untuk menambahkan group paket yang akan dimigrasi.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git addpkg}} - Perintah ini merupakan perintah yang digunakan untuk menambahkan nama paket yang akan di migrasi
+
+	\item Perintah \texttt{\textbf{boidev bzr2git addpkg-file}} - Perintah ini merupakan perintah yang digunakan untuk menambahkan nama paket yang akan dimigrasi melalui file list paket yang berekstensi \textbf{.boikg}
+
+	\item Perintah \texttt{\textbf{boidev bzr2git remove-pkg-group}} - Perintah ini merupakan perintah yang digunakan untuk menghapus nama group paket migrasi. Perintah ini akan menghapus semau daftar paket yang terkait dengan \textbf{Group}.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git rename-pkg-group}} - Perintah ini merupakan perintah yang digunakan untuk mengubah nama group paket migrasi.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git remove-pkg}} - Perintah ini merupakan perintah yang digunakan untuk menghapus nama paket yang terdaftar pada system program \textbf{BlankOnDev}
+
+	\item Perintah \texttt{\textbf{boidev bzr2git list-pkg}} - Perintah ini merupakan perintah yang digunakan untuk melihat daftar paket yang terdaftar pada system program \textbf{BlankOnDev}.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git list-pkg-group}} - Perintah ini merupakan perintah yang digunakan untuk melihat daftar group paket.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git search-pkg}} - Perintah ini merupakan perintah yang digunakan utnuk mencari nama paket yang terdaftar pada system program \textbf{BlankOnDev}.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git branch}} - Perintah ini merupakan perintah yang digunakan untuk mengambil/download paket dari repositori bazaar berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git bzr-cgit}} - Perintah ini merupakan perintah yang digunakan untuk mengkonversi format repositori bazaar ke format repositori github, berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}
+
+	\item Perintah \texttt{\textbf{boidev bzr2git git-push}} - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload, berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}
+
+	\item Perintah \texttt{\textbf{boidev bzr2git git-push-new}} - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload namum belum dikonversi ke format repositori github, berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}. Perintah ini sama seperti instruksi dari github setelah nama repositori baru ditambahkan.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git git-check}} - Perintah ini merupakan perintah yang digunakan untuk validasi repositori yang sudah diupload ke github.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git re-branch}} - Perintah ini merupakan perintah untuk download ulang paket dari bazaar repositori.
+
+	\item Perintah \texttt{\textbf{boidev bzr2git re-gitpush}} - Perintah ini digunakan untuk memperbaiki kesalahan upload paket ke github yang tidak dilakukan convert format sebelumnya.
+\end{enumerate}
+
+\subsection{Perintah help}
+\noindent
+Bagian ini terdiri dari 17 Perintah yaitu :
+\begin{enumerate}
+	\item Perintah \texttt{\textbf{boidev help}} - Untuk melihat seluruh help perintah \texttt{boidev}
+	
+	\item Perintah \texttt{\textbf{boidev bzr2git help}} - Untuk melihat seluruh perintah \texttt{boidev bzr2git}
+	
+	Adapun perintah help untuk perintah yang diawali dengan perintah \texttt{boidev bzr2git} yaitu :
+	\begin{enumerate}
+        \item perintah \texttt{\textbf{boidev bzr2git addpkg-group help}}
+        \item perintah \texttt{\textbf{bzr2git addpkg help}}
+        \item perintah \texttt{\textbf{bzr2git addpkg-file help}}
+        \item perintah \texttt{\textbf{bzr2git list-pkg help}}
+        \item perintah \texttt{\textbf{bzr2git rename-pkg-group help}}
+        \item perintah \texttt{\textbf{bzr2git remove-pkg-group help}}
+        \item perintah \texttt{\textbf{bzr2git remove-pkg help}}
+        \item perintah \texttt{\textbf{bzr2git search-pkg help}}
+        \item perintah \texttt{\textbf{bzr2git branch help}}
+        \item perintah \texttt{\textbf{bzr2git bzr-cgit help}}
+        \item perintah \texttt{\textbf{bzr2git git-push help}}
+        \item perintah \texttt{\textbf{bzr2git git-push-new help}}
+        \item perintah \texttt{\textbf{bzr2git git-check help}}
+        \item perintah \texttt{\textbf{bzr2git re-branch help}}
+        \item perintah \texttt{\textbf{bzr2git re-gitpush help}}
+	\end{enumerate}
+\end{enumerate}

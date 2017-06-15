@@ -1,0 +1,66 @@
+
+\lstdefinelanguage{Ini}
+{
+	basicstyle=\ttfamily\scriptsize,
+	columns=fullflexible,
+	backgroundcolor=\color{backcolour},
+	morecomment=[s][\color{Orchid}\bfseries]{[}{]},
+	morecomment=[l]{\#},
+	morecomment=[l]{;},
+	commentstyle=\color{gray}\ttfamily,
+	morekeywords={},
+	keywordstyle={\color{green}\bfseries}
+}
+
+\lstdefinelanguage{ShellBash}
+{
+	basicstyle=\color{blue}\ttfamily\footnotesize,
+	columns=fullflexible,
+	backgroundcolor=\color{backcolour},
+	morecomment=[s][\color{Orchid}\bfseries]{[}{]},
+	morecomment=[l]{\#},
+	morecomment=[l]{;},
+	commentstyle=\color{gray}\ttfamily,
+	morekeywords={},
+}
+\lstdefinelanguage{ShellBash2}
+{
+	basicstyle=\color{blue}\ttfamily\scriptsize,
+	columns=fullflexible,
+	backgroundcolor=\color{backcolour},
+	morecomment=[s][\color{Orchid}\bfseries]{[}{]},
+	morecomment=[l]{\#},
+	morecomment=[l]{;},
+	commentstyle=\color{gray}\ttfamily,
+	morekeywords={
+		boidev
+		},
+}
+\lstdefinelanguage{ShellBash3}
+{
+	basicstyle=\color{Black}\ttfamily\scriptsize,
+	columns=fullflexible,
+	backgroundcolor=\color{backcolour},
+	morecomment=[s][\color{Violet}\bfseries]{[}{]},
+	morecomment=[l]{\#},
+	morecomment=[l]{;},
+	commentstyle=\color{gray}\ttfamily,
+	keywordstyle=\color{gray}\ttfamily,
+	morekeywords={},
+}
+
+\lstdefinestyle{myCustomMatlabStyle}{
+	columns=fullflexible,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false,
+	breaklines=true,
+	basicstyle=\color{blue}\scriptsize\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morecomment=[s][\color{Orchid}\bfseries]{[}{]},
+	morecomment=[l]{\#},
+	morecomment=[l]{;},
+	commentstyle=\color{Gray}\ttfamily
+}
+\lstset{style=myCustomMatlabStyle}
+\lstset{framextopmargin=50pt}

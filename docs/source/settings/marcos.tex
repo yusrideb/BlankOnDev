@@ -1,0 +1,16 @@
+\newcommand{\latex}{\LaTeX\xspace}
+
+%\renewcommand{\rmdefault}{phv} % Arial
+%\renewcommand{\sfdefault}{phv} % Arial
+\renewcommand\thepart{\arabic{part}}
+\renewcommand\cftpartpresnum{Part~}
+
+\newcommand\solidrule[1][1cm]{\rule[0.5ex]{#1}{.4pt}}
+\newcommand\dashedrule{\mbox{%
+		\solidrule[2mm]\hspace{2mm}\solidrule[2mm]\hspace{2mm}\solidrule[2mm]}}
+
+\def\magicref#1{\expandafter\magicref@i#1\@nil}
+\def\magicref@i#1::#2\@nil{section \ref{#1} on page \pageref{#1::#2}}
+\makeatother
+
+\newcommand{\Twomin}[1]{-\hspace{0.5mm}-#1}

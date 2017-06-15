@@ -1,0 +1,36 @@
+\begin{titlepage}
+
+\addcontentsline{toc}{chapter}{Cover}
+
+%	\titleBC % This command includes the title page
+\centering % Center all text
+\def\CP{\textit{\Huge BlankOnDev v0.1005}} % Title
+
+\settowidth{\unitlength}{\CP} % Set the width of the curly brackets to the width of the title
+{\color{LightGoldenrod}\resizebox*{\unitlength}{\baselineskip}{\rotrt{$\}$}}} \\[\baselineskip] % Print top curly bracket
+\textcolor{Sienna}{\CP} \\[\baselineskip] % Print title
+{\color{RosyBrown}\Large User Guide} \\ % Tagline or further description
+{\color{LightGoldenrod}\resizebox*{\unitlength}{\baselineskip}{\rotlft{$\}$}}} % Print bottom curly bracket
+
+\vfill % Whitespace between the author name and the publisher logo
+
+\begin{center}
+	\includegraphics[height=2cm]{logo.png}\\
+\end{center}
+
+\vfill % Whitespace between the title and the author name
+\textbf{Author:}\\
+\vspace{5mm}
+{\Large\textbf{Achmad Yusri Afandi}}\\ % Author name
+\vspace{5mm}
+{\Large\textbf{BlankOn Developer Team}}\\ % Author name
+
+\vfill % Whitespace between the author name and the publisher logo
+
+
+2017 % Year published
+\end{titlepage}
+
+\title{Tutorial BlankOnDev version 0.1005}
+\author{Achmad Yusri Afandi \\ and \\ BlankOn Develper Team}
+\date{\today}
