@@ -466,13 +466,6 @@ sub bzr2git_gitpush {
     $cmd_gitpush .= "$git_checkout $build_rilis; ";
     $cmd_gitpush .= "$git_push_repo $build_rilis";
 
-    my $cloneurl = 'https://github.com/plack/Plack.git';
-
-    my($stderr,$stdout);
-    my @cmd = (qw/ git clone /, $cloneurl);
-
-    my $success = IPC::Run::run \@cmd, '>', \$stdout, '2>pty>', \$stderr;
-
     cmd_gitpush($locfile_outlogs, $locfile_errlogs, $dirOfPkgs, $cmd_gitpush);
 
     # Read File :
