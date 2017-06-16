@@ -313,14 +313,11 @@ sub _rilis {
 # Subroutine for option "config" :
 # ------------------------------------------------------------------------
 sub config {
-    my $timezone;
     my $confirmation;
-    my $cache_auth;
     my $gnupg_genkey;
     my $gitname;
     my $gitemail;
     my $r_gitset = 1;
-    my $read_fileCfg;
     my $home_dir = $ENV{"HOME"};
 
     # Get current general config :
@@ -336,7 +333,6 @@ sub config {
     # Preare general conig :
     my $data_setup = data_setup();
     my $dir_dev = $data_setup->{'dir_dev'};
-    my $prefix_file_cfg = $data_setup->{'prefix_flcfg'};
     my $ext_flcfg = $data_setup->{'fileCfg_ext'};
     my $file_cfg = 'general'.$ext_flcfg;
 
@@ -346,10 +342,7 @@ sub config {
     my $getGit_cmd = $get_cmd->{'git'};
     my $gitCmd_name = $getGit_cmd->{'cfg-name'};
     my $gitCmd_email = $getGit_cmd->{'cfg-email'};
-    my $gitCmd_authCache = $getGit_cmd->{'cfg-credential-cache'};
-    my $gitCmd_authCache_clear = $getGit_cmd->{'cfg-creden-cache-clear'};
     my $gitCmd_list = $getGit_cmd->{'cfg-list'};
-    my $gnupg_cmd = $get_cmd->{'gpg'};
 
     # For TimeZone :
     # ----------------------------------------------------------------
@@ -364,8 +357,6 @@ sub config {
         if ($confirmation eq 'y') {
 
             # Print FORM :
-            my $name_git;
-            my $email_git;
             print "Enter your github fullname [$curr_name] : ";
             chomp($gitname = <STDIN>);
             print "Enter your github email [$curr_emailgit] : ";
@@ -433,30 +424,6 @@ sub config {
         }
     }
 
-    $read_fileCfg = BlankOnDev::Utils::file->read($home_dir."/.gitconfig");
-    my $auth_cache_git;
-    if ($read_fileCfg =~ m/(helper)\s(\=)\s(.*)/) {
-        # For cache user and password git push :
-        print "Cache user and password is activated\n";
-        print "You want to clear [y/n] : ";
-        chomp($cache_auth = <STDIN>);
-        if ($cache_auth eq 'y') {
-#            $read_fileCfg =~ s/^\[credential.*//g;
-#            $read_fileCfg =~ s/(^\s+helper.*)+//g;
-#            chmod 0666, $home_dir.'/.gitcontif';
-#            BlankOnDev::Utils::file->create('/.gitconfig', $home_dir, $read_fileCfg);
-#            chmod 0644, $home_dir.'/.gitcontif';
-            system($gitCmd_authCache_clear);
-        }
-    } else {
-        # For cache user and password git push :
-        print "You want cache user and password git [y/n]: ";
-        chomp($cache_auth = <STDIN>);
-        if ($cache_auth eq 'y' or $cache_auth eq '') {
-            system("$gitCmd_authCache --timeout=86400");
-        }
-    }
-
     # get List git config :
     system($gitCmd_list);
 
@@ -509,17 +476,9 @@ sub boi_rilis {
 # ------------------------------------------------------------------------
 sub enc_ggp_genkey {
     my ($email, $passphrase) = @_;
-#    my $len_email = length $email;
-#    my $len_pass = length $passphrase;
-#    print "\n";
-#    print "In Enc\n";
-#    print "Input Email : $email [$len_email]\n";
-#    print "Input Passphrase : $passphrase [$len_pass]\n";
 
     my $plan_key = BlankOnDev::enkripsi->getKey_enc($email);
     my $encoder = BlankOnDev::enkripsi->Encoder($passphrase, $plan_key);
-#    print "Result Encoder : $encoder\n";
-#    print Dumper $plan_key;
 
     return $encoder;
 }
@@ -527,17 +486,9 @@ sub enc_ggp_genkey {
 # ------------------------------------------------------------------------
 sub dec_gpg_genkey {
     my ($email, $passphrase) = @_;
-#    my $len_email = length $email;
-#    my $len_pass = length $passphrase;
-#    print "\n";
-#    print "In Dec\n";
-#    print "Input Email : $email [$len_email]\n";
-#    print "Input Passphrase : $passphrase [$len_pass]\n";
 
     my $plan_key = BlankOnDev::enkripsi->getKey_enc($email);
     my $decoder = BlankOnDev::enkripsi->Decoder($passphrase, $plan_key);
-#    $decoder =~ s/\|+//g;
-#    print Dumper $plan_key;
 
     return $decoder;
 }
@@ -556,7 +507,6 @@ sub gpg_config {
     my $confirm_passph = '';
     my $gpg_passph = '';
     my $gpg_passph_enc = '';
-    my $curr_gpg_passph;
 
     # Data Setup :
     my $data_setup = data_setup();
@@ -613,11 +563,6 @@ sub gpg_config {
         }
         $r_gpgcfg = 1;
         ReadMode 1;
-
-#        print "\n";
-#        print "ori passph gpg : $gpg_passph \n";
-#        print "Email for enc : $gpg_email\n";
-#        print "Enc passph gpg : $gpg_passph_enc \n";
     } else {
         $gpg_passph = $passph;
         $gpg_passph_enc = enc_ggp_genkey($email, $passph);
@@ -655,15 +600,6 @@ sub gpg_config {
     # Return :
     $gpgCfg = \%data;
     return \%data;
-
-    # Config Password :
-    #    print "Enter your full name : ";
-    #    chomp($git_username = <STDIN>);
-    #    print "Enter your email : ";
-    #    chomp($email = <STDIN>);
-    #    print "Enter your passphrase : ";
-    #    ReadMode('noecho');
-    #    $git_password = ReadLine(0);
 }
 # Subroutine for Bazaar Configure :
 # ------------------------------------------------------------------------
@@ -770,12 +706,10 @@ sub read_gen_cfg {
 # ------------------------------------------------------------------------
 sub read_config_bzr2git {
     my $data = '';
-    my %data_pkg = ();
     my $data_setup = data_setup();
     my $dir_dev = $data_setup->{'dir_dev'};
     my $prefix_file_cfg = $data_setup->{'prefix_flcfg'};
     my $ext_flcfg = $data_setup->{'fileCfg_ext'};
-    my $home_dir = $ENV{"HOME"};
     my $pkgs_dir = $data_setup->{'dir_pkg'};
     my $logs_dir = $data_setup->{'dirlogs'};
 
@@ -795,7 +729,6 @@ sub read_config_bzr2git {
 
     my $file_cfg = $prefix_file_cfg . $rilisCfg. $ext_flcfg;
     my $loc_flcfg = $dir_dev.$file_cfg;
-    my $locdir_pkg = $dir_dev.$pkgs_dir;
     $filename_cfg = $file_cfg;
     $dirdev_cfg = $dir_dev;
     my $adddt_pkg;
@@ -835,14 +768,6 @@ sub read_config_bzr2git {
                 $bzr = $data_allcfg->{'bzr'} if exists $data_allcfg->{'bzr'};
                 $git = $data_allcfg->{'git'} if exists $data_allcfg->{'git'};
                 $pkg = $data_allcfg->{'pkg'} if exists $data_allcfg->{'pkg'};
-                my $data_format = $format_config;
-#                $data_format->{prepare} = 0;
-#                $data_format->{'build'} = $build;
-#                $data_format->{'build'}->{'rilis'} = $rilisCfg;
-#                $data_format->{'build'}->{'gpg'} = $build_gpg;
-#                $data_format->{'bzr'} = $bzr;
-#                $data_format->{'git'} = $git;
-#                $data_format->{'pkg'} = $pkg;
                 $data = $data_allcfg;
             } else {
                 $adddt_pkg = Hash::MultiValue->new();
@@ -870,11 +795,9 @@ sub read_config_bzr2git {
             $data = $result_cfg;
 
             BlankOnDev::Utils::file->create($file_cfg, $dir_dev, encode_json($result_cfg));
-#            $format_config->{'pkg'}->{'dirpkg'} = $dir_pkgrilis;
         }
     } else {
         mkdir($dir_data_boidev);
-#        $format_config->{'pkg'}->{'dirpkg'} = $dir_pkgrilis;
         $adddt_pkg = Hash::MultiValue->new();
         $adddt_pkg->add('dirpkg' => $dir_pkgrilis);
         $adddt_pkg->add('group' => {});
@@ -911,10 +834,6 @@ sub read_config_bzr2git {
             mkdir($log_dir_rilis);
         }
     }
-
-#    BlankOnDev::Migration::bazaar2GitHub::tmp_cfg->first_addpkg_fileTmp($data_setup, $rilisCfg);
-
-#    print Dumper $data;
 
     $allconfig = $data;
     $r_config = $data;

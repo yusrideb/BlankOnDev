@@ -231,7 +231,7 @@ Perintah C<B<boidev bzr2git bzr-cgit>> - Perintah ini merupakan perintah yang di
 Perintah C<B<boidev bzr2git git-push>> - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload, berdasarkan nama paket yang sudah terdaftar pada system program B<BlankOnDev>
 
 =item 14.
-Perintah C<B<boidev bzr2git git-push-new>> - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload namum belum dikonversi ke format repositori github, berdasarkan nama paket yang sudah terdaftar pada system program B<BlankOnDev>. Perintah ini sama seperti instruksi dari github setelah nama repositori baru ditambahkan.
+Perintah C<B<boidev bzr2git git-push-new>> - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload namum belum dikonversi ke format repositori github, berdasarkan nama paket yang sudah terdaftar pada system program B<BlankOnDev>. Perintah ini sama seperti instruksi yang tampil dihalaman github saat  nama repositori baru ditambahkan.
 
 =item 15.
 Perintah C<B<boidev bzr2git git-check>> - Perintah ini merupakan perintah yang digunakan untuk validasi repositori yang sudah diupload ke github.
@@ -240,7 +240,7 @@ Perintah C<B<boidev bzr2git git-check>> - Perintah ini merupakan perintah yang d
 Perintah C<B<boidev bzr2git re-branch>> - Perintah ini merupakan perintah untuk download ulang paket dari bazaar repositori.
 
 =item 17.
-Perintah C<B<boidev bzr2git re-gitpush>> - Perintah ini digunakan untuk memperbaiki kesalahan upload paket ke github yang tidak dilakukan convert format sebelumnya.
+Perintah C<B<boidev bzr2git re-gitpush>> - Perintah ini digunakan untuk memperbaiki kesalahan upload paket ke github yang dimana paket belum dilakukan convert format sebelumnya.
 
 =back
 
@@ -299,7 +299,7 @@ Adapun perintah help untuk perintah yang diawali dengan perintah C<boidev bzr2gi
 
 Pada bagian ini akan dijelaskan hal-hal yang perlu dipersipakan sebelum menggunakan program B<BlankOnDev> yaitu "B<rng-tools>".
 
-=head3 Install dan Konfigurasi I<rng-tools>
+=head3 2.1.1. Install dan Konfigurasi I<rng-tools>
 
 Untuk install B<rng-tools> dengan perintah
 
@@ -336,14 +336,84 @@ komentar C<\#HRNGDEVICE=/dev/null>.
 Kemudian, Simpan file dan start service B<rng-tools> seperti contoh perintah berikut:
 
     sudo /etc/init.d/rng-tools start
+    
+=head3 2.1.2. Membuat I<SSH Public key authentication> for Github
 
-=head3 Metode Instalasi secara Manual
+Konfigurasi ini bertujuan agar pada saat push repositori ke Github tidak lagi harus memasukkan C<Username> dan C<Password> saat proses push repositori.
+
+=head4 2.1.2.1. Membuat Public key SSH
+
+Jalankan perintah C<B<ssh-keygen -t rsa>> seperti berikut :
+
+    $ ssh-keygen -t rsa -b 4096 -C "linuxer08@gmail.com"
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (/home/yusrideb/.ssh/id_rsa):
+    Created directory '/home/yusrideb/.ssh'.
+
+Langsung Saja Tekan Enter pada Kedua form ini.
+
+    Enter passphrase (empty for no passphrase):
+    Enter same passphrase again:
+
+Kemudian proses akan dilanjukan seperti ilustrasi beriku ini :
+
+    Your identification has been saved in /home/yusrideb/.ssh/id_rsa.
+    Your public key has been saved in /home/yusrideb/.ssh/id_rsa.pub.
+    The key fingerprint is:
+    SHA256:KkcuVZ/vd9mbbtU0w62ThEqa/63ZrdV762h9SIfeRys linuxer08@gmail.com
+    The key's randomart image is:
+    +---[RSA 2048]----+
+    |                 |
+    |                 |
+    |        .    .. .|
+    |       . .... .+o|
+    |      o S+o. . =+|
+    |     + .o ..  * *|
+    |    o +  .  .o.*B|
+    |     +    .. E=BX|
+    |           .*+OXB|
+    +----[SHA256]-----+
+
+=head4 2.1.2.2. Menambahkan SSH Key di Akun Github
+
+Pada bagian ini sebagai contoh file I<Public Key SSH> berada di C</home/yusrideb/.ssh/id_rsa.pub>
+Setelah itu, masuk ke akun github dan lakukan pengaturan di bagian I<SSH and GPG Keys> untuk menanbahkan I<SSH Key> pada B<Github> dengan isi dari file
+C</home/yusrideb/.ssh/id_rsa.pub>, seperti berikut :
+
+=begin html
+
+<p><center>
+<figure>
+<img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/add-ssh-key-on-gtihub.png" alt="Form Awal CPAN" />
+<figcaption>Gambar 2.1. <b>Public SSH Key> di Akun Github</b></figcaption>
+</figure>
+</center></p>
+
+=end html
+
+Penjelasan gambar :
+
+=over
+
+=item * Klik B<SSH and GPG Keys>
+
+=item * Klik B<New SSH Key>
+
+=item * Masukkan Nama I<SSH Key>, contohnya B<My_SSH\_key>
+
+=item * Masukkan isi file C<id\_rsa.pub> ke dalam form input B<Key>, Setelah itu klik B<Add SSH Key>.
+
+=item * Hasil akan tampil di Daftar B<SSH Keys> seperti yang ditunjukkan oleh gambar diatas.
+
+=back
+
+=head3 2.1.3. Metode Instalasi secara Manual
 
 Instalasi manual untuk Module Perl B<BlankOnDev> yang dimaksud disini yaitu instalasi dari Source Module CPAN yang dapat didownload pada halaman :
 
 L<https://metacpan.org/module/BlankOnDev> atau L<https://github.com/yusrideb/BlankOnDev>
 
-=head4 Install Dependensi Module
+=head4 2.1.3.1. Install Dependensi Module
 
 Jika versi B<BlankOnDev Toos> yang terbaru sudah pernah di install sebelumnya, maka I<Dependensi> tidak pernah di install lagi.
 
@@ -352,7 +422,7 @@ Jika versi B<BlankOnDev Toos> yang terbaru sudah pernah di install sebelumnya, m
     sudo cpan -i GnuPG Hash::MultiValue Term::ReadKey LWP::UserAgent
     sudo cpan -i Text::SimpleTable::AutoWidth Capture::Tiny
 
-=head4 Install Module Perl
+=head4 2.1.3.1. Install Module Perl
 
 Download Source dari halaman L<https://metacpan.org/module/BlankOnDev>,
 Contoh file source : "B<BlankOnDev-0.1005.tar.gz>"
@@ -361,7 +431,7 @@ Contoh file source : "B<BlankOnDev-0.1005.tar.gz>"
     cd BlankOnDev-0.1005
     sudo perl Makefile.PL && make && make install && make clean.
 
-=head3 Metode Instalasi BlankOnDev dari CPAN Perl
+=head3 2.1.4. Metode Instalasi BlankOnDev dari CPAN Perl
 
 Pada bagian ini I<Dependensi> beserta module utama akan di install secara otomatis. ketika perintah C<cpan -i> di jalankan, seperti berikut :
 
@@ -369,7 +439,7 @@ Pada bagian ini I<Dependensi> beserta module utama akan di install secara otomat
 
 Proses instalasi ini akan berlangsung kurang lebih 10 menit dan bisa lebih tergantung kemampuan PC/Laptop Anda, karena selama proses instalasi berlangsung terdapat beberapa module-module dependensi yang melakukan kompilasi I<C Source>.
 
-Dengan instalasi menggunakan perintah C<cpan -i>, maka versi yang terinstall dari module dependensi atau module B<BlankOnDev> yaitu versi terbaru, tidak seperti B<Metode instalasi manual>, dimana versi module tergantung versi yang Anda download.
+Dengan instalasi menggunakan perintah C<cpan -i>, maka versi yang akan terinstalasi dari module dependensi atau module utama B<BlankOnDev> yaitu versi terbaru, tidak seperti B<Metode instalasi manual>, dimana versi module tergantung versi yang Anda download.
 
 Jika belum pernah menjalankan perintah B<C<cpan -i>> sebelumnya, maka pada saat perintah tersebut dijalankan pertama kali akan tampi B<Form> seperti berikut :
 
@@ -378,7 +448,7 @@ Jika belum pernah menjalankan perintah B<C<cpan -i>> sebelumnya, maka pada saat 
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/install-from-cpan-1.png" alt="Form Awal CPAN" />
-<figcaption>Gambar 2.1. <b>Form Awal CPAN</b></figcaption>
+<figcaption>Gambar 2.2. <b>Form Awal CPAN</b></figcaption>
 </figure>
 </center></p>
 
@@ -393,20 +463,20 @@ Jika sebelumnya anda sudah menggunakan perintah B<C<cpan -i>> maka instalasi mod
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/install-from-cpan-2.png" alt="Form Awal CPAN" />
-<figcaption>Gambar 2.2. <b>Instalasi Module Perl di Mulai</b></figcaption>
+<figcaption>Gambar 2.3. <b>Instalasi Module Perl di Mulai</b></figcaption>
 </figure>
 </center></p>
 
 =end html
 
-Jika dalam proses instalasi tidak ada yang bermasalah, maka akhir dari proses ini akan tampil seperti gambar berikut :
+Jika pada proses instalasi tidak ditemukan masalah, maka akhir dari proses ini akan tampil seperti gambar berikut :
 
 =begin html
 
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/install-from-cpan-3_finish.png" alt="Form Awal CPAN" />
-<figcaption>Gambar 2.3. <b>Instalasi Module Selesai</b></figcaption>
+<figcaption>Gambar 2.4. <b>Instalasi Module Selesai</b></figcaption>
 </figure>
 </center></p>
 
@@ -416,7 +486,7 @@ Jika dalam proses instalasi tidak ada yang bermasalah, maka akhir dari proses in
 
 Pada bagian ini akan dijelaskan langkah-langkah penggunaan perintah B<boidev>. Berikut gambaran penggunaan perintah B<boidev> :
 
-=head3 Persiapan Migrasi Paket :
+=head3 2.2.1. Persiapan Migrasi Paket :
 
 =over
 
@@ -463,7 +533,7 @@ B<Step 3> -  Menambahkan I<Group Paket> untuk I<Paket-paket> yang akan di migras
 
 =back
 
-=head3 Proses Migrasi Paket :
+=head3 2.2.2. Proses Migrasi Paket :
 
 =over
 
@@ -526,11 +596,6 @@ Form berikut ini isi sesuai petunjuk yang diberi tanda B<#>.
     # Masukkan Passphrase seperti saat menjalankan gpg --gen-key
     Enter Passphrase gpg :
 
-    # Untuk Cache username dan password github
-    # setelah username dan password dimasukkan pada saat
-    # proses "git push"
-    You want to cache username and password github ? [y or n] y
-
    
 =head3 2.3.2. Dengan perintah C<boidev mig_prepare>
 
@@ -554,7 +619,7 @@ Form berikut yaitu form B<Github config> :
 
 =over
 
-=item * Jika inputnya B<C<y>> maka akan tampil form config github seperti berikut :
+=item * Jika jawabannya B<C<y>> maka akan tampil form config github seperti berikut :
 
     # Masukkan nama jika, ingin mengubah nama yang sudah
     # tersimpan pada system. Jika tidak langsung tekan Enter
@@ -564,40 +629,17 @@ Form berikut yaitu form B<Github config> :
     # tersimpan pada system. Jika tidak langsung tekan Enter
     Enter your github email [linuxer08@gmail.com] :
 
-    # Jika cache sudah aktif, maka form berikut akan tampil
-    # jika cache belum aktif, maka form yang tampil yaitu :
-    # "You want cache user and password git [y/n]:"
-    #
-    # Jawaban hanya "y" or "n", jika dikosongkan
-    # maka sama dengan "n"
-    You want to clear [y/n] :
-
-=item * Jika inputnya B<C<n>> maka akan dilanjutkan ke form berikutnya.
-	
-=back
-
-Form berikut yaitu form B<Github config> clear cache atau aktifkan cache username dan passowrd github:
-
-=over
-
-=item * Jika cache aktif :
-
-    Cache user and password is activated
-    You want to clear [y/n] :
-
-=item * Jika cache belum aktif :
-
-    You want cache user and password git [y/n]:
+=item Jika inputnya B<C<n>> maka akan dilanjutkan ke form berikutnya.
 
 =back
 
 =head4 2.3.2.2. Form GnuPG Generate Key :
 
-    You want cache user and password git [y/n]:
-
+    You want GnuPG Generate key [y/n]:
+    
 =over
 
-=item * Jika jawaban B<C<y>> :
+=item * Jika jawabannya B<C<y>> :
 	
 	# Masukkan nama jika, ingin mengubah nama yang sudah
 	# tersimpan pada system. Jika tidak langsung tekan Enter
@@ -608,11 +650,15 @@ Form berikut yaitu form B<Github config> clear cache atau aktifkan cache usernam
 	# Jika tidak langsung tekan Enter
 	Enter E-mail [yusrideb@cpan.org] :
 	
+Setelah form diatas, maka akan tampil form untuk mengubah I<passphrase GnuPG> atau tidak, 
+Jika jawabannya "C<B<y>>" maka akan tampil form untuk memasukkan passphrase, 
+jika tidak, maka proses B<Generate Key GnuPG> akan dilanjutkan.
 
-Setelah form disini, maka akan tampilk hasil B<Generate Key GnuPG> :
-
+	You want to enter different passphrase GnuPG ? [y or n] n
 	
-	You want to enter different passphrase GnuPG ? [y or n] y
+\noindent
+Setelah form diatas, maka akan tampil hasil B<Generate Key GnuPG> :
+	
 	Enter passphrase : pub   1024R/243741DF 2017-06-12
 	Key fingerprint = 8891 3EF3 6E21 C298 B7B6  0F0A 1380 3397 2437 41DF
 	uid                  Achmad Yusri Afandi <yusrideb@cpan.org>
@@ -648,7 +694,7 @@ Setelah form disini, maka akan tampilk hasil B<Generate Key GnuPG> :
 	# Masukkan URL  URL repositori github jika anda ingin
 	# mengubah alamatnya. Jika tidak, langsung saja tekan Enter.
 	#
-	Enter git url [https://github.com/blankon-packages] :
+	Enter git url [git@github.com:blankon-packages] :
 
 =back
 
@@ -658,7 +704,7 @@ Seperti yang telah dijelaskan pada upabab L<I<2. Implementasi - I<Persiapan Migr
 
 =head4 2.3.3.1. Menambahkan Group Paket
 
-Untuk menambahkan group paket ikut perintah berikut :
+Untuk menambahkan group paket gunakan perintah berikut :
 
     $ boidev bzr2git addpkg-group
 
@@ -805,7 +851,7 @@ Kemudian akan form untuk memilih group paket, setelah itu akan tampil daftar pak
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/boidev_bzr2git_list-pkg.png" alt="Daftar Paket yang telah ditambahkan dengan nama group github-6" />
-<figcaption>Gambar 2.4. <b>Daftar Paket yang telah ditambahkan dengan nama group github-6</b></figcaption>
+<figcaption>Gambar 2.5. <b>Daftar Paket yang telah ditambahkan dengan nama group github-6</b></figcaption>
 </figure>
 </center></p>
 
@@ -822,7 +868,7 @@ Output :
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/boidev_bzr2git_list-pkg_groupName.png" alt="Daftar Paket yang telah ditambahkan dengan nama group github-6" />
-<figcaption>Gambar 2.5. <b>Daftar Paket yang telah ditambahkan dengan nama group github-6</b></figcaption>
+<figcaption>Gambar 2.6. <b>Daftar Paket yang telah ditambahkan dengan nama group github-6</b></figcaption>
 </figure>
 </center></p>
 
@@ -830,7 +876,7 @@ Output :
 
 =head2 2.4. Proses Migrasi Paket
 
-Proses yang dilakukan disini yaitu penggunaan perintah-perintah seperti contoh berikut, dengan perintah B<boidev> yang lebih aman untuk meminimalisir kesalahan penulisan perintah ataupun kesalahan penulisan I<nama paket>.
+Proses yang dilakukan disini yaitu penggunaan perintah-perintah seperti contoh berikut. Perintah B<boidev> bertujuan untuk meminimalisir kesalahan penulisan perintah ataupun kesalahan penulisan I<nama paket>.
 
     bzr branch http://dev.blankonlinux.or.id/browser/tambora/<nama_paket>
     cd <nama_paket>
@@ -846,7 +892,9 @@ Proses yang dilakukan disini yaitu penggunaan perintah-perintah seperti contoh b
 
 =head3 2.4.1. Migrasi Paket dengan B<Metode Split>
 
-Seperti yang telah dijelaskan pada upabab \textit{\ref{subsec:implm}. Implementasi, di halaman \pageref{itm:metode_split}}, Bahwa I<metode> ini melakukukan I<branch paket>, I<convert format ke git>, dan I<push ke git> secara terpisah. Seperti metode migrasi yang dilakukan secara manual seperti yang ditunjukkan pada \textit{listing - \ref{lst:migrasi_manual} Perintah Migrasi} diatas. Berikut langkah-langkahnya :
+Seperti yang telah dijelaskan pada bagian I<2. Implementasi> diatas, Bahwa I<metode> ini melakukukan I<branch paket>, I<convert format ke git>,
+dan I<push ke git> secara terpisah. Seperti metode migrasi yang dilakukan secara manual seperti yang ditunjukkan pada script diatas.
+Berikut langkah-langkahnya :
 
 =head4 2.4.1.1. Perintah C<boidev bzr2git branch>
 
@@ -934,14 +982,15 @@ Proses yang akan tampil ketika salah satu perintah diatas dijalankan yaitu :
     
     ==================== bzr branch has finished ====================
 
-\subsubsection{Perintah {\small C<boidev bzr2git bzr-cgit>}}
-\noindent
+=head4 2.4.1.2. Perintah C<boidev bzr2git bzr-cgit>
+
 Perintah yang dapat digunakan yaitu :
 
 =over
 
-=item * {\small C<boidev bzr2git bzr-cgit>}
-=item * {\small C<boidev bzr2git bzr-cgit <nama\_group\_paket>>}
+=item * C<boidev bzr2git bzr-cgit>
+
+=item * C<boidev bzr2git bzr-cgit <nama_group_paket>>
 
 =back
 
@@ -977,15 +1026,15 @@ Proses yang akan tampil ketika salah satu perintah diatas dijalankan yaitu :
     
     ======= Packages in group "github-6" has been finished to convert ========
 
-\subsubsection{Perintah {\small C<boidev bzr2git git-push>}}
-\noindent
+=head4 2.4.1.3. Perintah C<boidev bzr2git git-push>
+
 Perintah yang dapat digunakan yaitu :
 
 =over
 
-=item * {\small C<boidev bzr2git git-push>}
+=item * C<boidev bzr2git git-push>
 
-=item * {\small C<boidev bzr2git git-push <nama\_group\_paket>>}
+=item * C<boidev bzr2git git-push [nama_group_paket]>
 
 =back
 
@@ -1001,14 +1050,6 @@ Proses yang akan tampil ketika salah satu perintah diatas dijalankan yaitu :
 
 
     gitpush : gnome-music
-
-    # Masukkan Username dan password github
-    #
-    Username for 'https://github.com': yusrideb
-    Password for 'https://yusrideb@github.com':
-
-Jika username dan password github di cache sebelumnya, maka proses berikutnya tidak akan lagi meminta untuk memasukkan I<username dan password>.
-
     Action Git push for packages gnome-music : 1
     gitpush : gnome-software
     Action Git push for packages gnome-software : 1
@@ -1049,15 +1090,15 @@ Jika username dan password github di cache sebelumnya, maka proses berikutnya ti
 
     ======= Packages in group "github-6" has been finished to git push =======
 
-=head4 2.4.1.2. Perintah C<boidev bzr2git git-check>
+=head4 2.4.1.5. Perintah C<boidev bzr2git git-check>
 
 Perintah yang dapat digunakan yaitu :
 
 =over
 
-=item * {\small C<boidev bzr2git git-check>}
+=item * C<boidev bzr2git git-check>
 
-=item * {\small C<boidev bzr2git git-check <nama\_group\_paket>>}
+=item * C<boidev bzr2git git-check <nama_group_paket>>
 
 =back
 
@@ -1096,7 +1137,7 @@ Proses yang akan tampil ketika salah satu perintah diatas dijalankan yaitu :
 
 =head4 2.4.3.3. Melihat hasil Migrasi
 
-Jika anda ingin melihat hasil migrasi gunakan perintah\\ {\small C<boidev bzr2git list-pkg <nama\_group\_paket>>} seperti berikut :
+Jika anda ingin melihat hasil migrasi gunakan perintah C<boidev bzr2git list-pkg [nama_group_paket]> seperti berikut :
 
     $ boidev mig_prepare
 
@@ -1107,14 +1148,14 @@ Output :
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/boidev_bzr2git_list-pkg-check.png" alt="List Packages" />
-<figcaption>Gambar 2.6. <b>List Packages</b></figcaption>
+<figcaption>Gambar 2.7. <b>List Packages</b></figcaption>
 </figure>
 </center></p>
 
 <p><center>
 <figure>
 <img src="https://yusrideb.github.io/BlankOnDev/docs/source/img/boidev_bzr2git_list-pkg-check_zoom.png" alt="List Packages bagian hasil git-check" />
-<figcaption>Gambar 2.7. <b>List Packages bagian hasil git-check</b></figcaption>
+<figcaption>Gambar 2.8. <b>List Packages bagian hasil git-check</b></figcaption>
 </figure>
 </center></p>
 
@@ -1123,7 +1164,7 @@ Output :
 
 =head3 2.4.2. Migrasi Paket dengan B<Skema One-time>
 
-Seperti yang telah dijelaskan pada upabab L<I<2. Implementasi - Proses Migrasi Paket - Skema one-time>|file:///home/achmad/apps/BlankOnDev/lib/BlankOnDev/Tutorial/id.html#Proses-Migrasi-Paket>,
+Seperti yang telah dijelaskan pada upabab L<I<2. Implementasi - Proses Migrasi Paket - Skema one-time>|https://metacpan.org/pod/distribution/BlankOnDev/lib/BlankOnDev/Tutorial/id.pod#Proses-Migrasi-Paket>,
 Bahwa I<metode> ini melakukukan I<branch paket>, I<convert format ke git>, dan I<push ke git> sekaligus dengan perintah I<C<boidev bzr2git>>. Berikut langkah-langkahnya:
 
 =head4 2.4.2.1. Migrasi 1 paket
