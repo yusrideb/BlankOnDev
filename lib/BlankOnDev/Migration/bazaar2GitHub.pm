@@ -1203,6 +1203,16 @@ sub remove_pkg_grp {
 
             if ($confirm_add_pkggrp == 1) {
 
+                if ($confirm_add_pkggrp == 1 and $confirm_remove_pkg == 1) {
+                    print "Enter new group name : ";
+                    chomp($new_group_name = <STDIN>);
+                    if ($new_group_name ne '') {
+                        $new_group_name = $new_group_name;
+                    } else {
+                        $new_group_name = 'undef-group';
+                    }
+                }
+
                 # add Group Name :
                 my $add_grp = prepare_config();
                 $dataPkg_cfg = $add_grp->{'add-group'}($dataPkg_cfg, $new_group_name);
