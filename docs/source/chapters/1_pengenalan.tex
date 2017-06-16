@@ -72,6 +72,7 @@ Berikut beberapa kasus yang menginspirasi penulis untuk membuat Tools dengan nam
 	
 	\item Build paket beserta dependensi paket. Setiap paket utama yang akan dibuild tentunya memiliki dependensi atau dalam artian adanya keterkaitan antar paket lainnya. Agar paket utama yang dibuild dapat stabil saat installasi maupun penggunaannya, maka dependensi paket juga harus sama stabilnya. Kemudian, jika hal ini dilakukan secara manual oleh pemaket, maka pasti akan memakan banyak waktu. (Lihat \hyperref[text:apt-rdepends]{\textbf{apt-rdepends}})
 	
+	\pagebreak
 	\item Pengaturan repositori di sistem pemaket, proses penggantian alamat Repositori masih tergolong manual, karena harus mengedit file konfigurasi di \texttt{/etc/apt/sources.list}. Jika hanya sebagai pengguna biasa ini tidak masalah. Namun untuk pengembang ini sangat banyak makan waktu ketika harus melakukan pengujian terhadap repositori.
 	
 	\item Proses pencarian source sebelum build paket. Ini juga akan memakan banyak waktu untuk mencari source paket yang sesuai dari beberapa repositori Debian GNU/Linux maupun turunannya.
@@ -194,13 +195,13 @@ Bagian ini terdiri dari 17 Perintah yaitu :
 
 	\item Perintah \texttt{\textbf{boidev bzr2git git-push}} - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload, berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}
 
-	\item Perintah \texttt{\textbf{boidev bzr2git git-push-new}} - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload namum belum dikonversi ke format repositori github, berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}. Perintah ini sama seperti instruksi dari github setelah nama repositori baru ditambahkan.
+	\item Perintah \texttt{\textbf{boidev bzr2git git-push-new}} - Perintah ini merupakan perintah yang digunakan untuk mendorong/upload yang sudah didownload namum belum dikonversi ke format repositori github, berdasarkan nama paket yang sudah terdaftar pada system program \textbf{BlankOnDev}. Perintah ini sama seperti instruksi yang tampil dihalaman github saat  nama repositori baru ditambahkan.
 
 	\item Perintah \texttt{\textbf{boidev bzr2git git-check}} - Perintah ini merupakan perintah yang digunakan untuk validasi repositori yang sudah diupload ke github.
 
 	\item Perintah \texttt{\textbf{boidev bzr2git re-branch}} - Perintah ini merupakan perintah untuk download ulang paket dari bazaar repositori.
 
-	\item Perintah \texttt{\textbf{boidev bzr2git re-gitpush}} - Perintah ini digunakan untuk memperbaiki kesalahan upload paket ke github yang tidak dilakukan convert format sebelumnya.
+	\item Perintah \texttt{\textbf{boidev bzr2git re-gitpush}} - Perintah ini digunakan untuk memperbaiki kesalahan upload paket ke github yang dimana paket belum dilakukan convert format sebelumnya.
 \end{enumerate}
 
 \subsection{Perintah help}

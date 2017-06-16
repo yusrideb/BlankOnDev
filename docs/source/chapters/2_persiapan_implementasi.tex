@@ -109,6 +109,10 @@ Langsung Saja Tekan Enter pada Kedua form ini.
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again: 
 \end{lstlisting}
+
+\noindent
+Kemudian proses akan dilanjukan seperti ilustrasi beriku ini :
+
 \begin{lstlisting}[language=ShellBash]
 Your identification has been saved in /home/yusrideb/.ssh/id_rsa.
 Your public key has been saved in /home/yusrideb/.ssh/id_rsa.pub.
@@ -200,7 +204,7 @@ sudo cpan -i BlankOnDev
 Proses instalasi ini akan berlangsung kurang lebih 10 menit dan bisa lebih tergantung kemampuan PC/Laptop Anda, karena selama proses instalasi berlangsung terdapat beberapa module-module dependensi yang melakukan kompilasi \textit{C Source}. 
 
 \noindent
-Dengan instalasi menggunakan perintah \texttt{cpan -i}, maka versi yang terinstall dari module dependensi atau module \textbf{BlankOnDev} yaitu versi terbaru, tidak seperti \textbf{Metode instalasi manual}, dimana versi module tergantung versi yang Anda download.
+Dengan instalasi menggunakan perintah \texttt{cpan -i}, maka versi yang akan terinstalasi dari module dependensi atau module utama \textbf{BlankOnDev} yaitu versi terbaru, tidak seperti \textbf{Metode instalasi manual}, dimana versi module tergantung versi yang Anda download.
 
 \noindent
 Jika belum pernah menjalankan perintah \textbf{\texttt{cpan -i}} sebelumnya, maka pada saat perintah tersebut dijalankan pertama kali akan tampi \textbf{Form} seperti berikut :
@@ -226,7 +230,7 @@ Jika sebelumnya anda sudah menggunakan perintah \textbf{\texttt{cpan -i}} maka i
 \end{figure}
 
 \noindent
-Jika dalam proses instalasi tidak ada yang bermasalah, maka akhir dari proses ini akan tampil seperti gambar berikut :
+Jika pada proses instalasi tidak ditemukan masalah, maka akhir dari proses ini akan tampil seperti gambar berikut :
 
 \begin{figure}[H]
 	\centering
@@ -242,8 +246,7 @@ Pada bagian ini akan dijelaskan langkah-langkah penggunaan perintah \textbf{boid
 
 \subsection{Persiapan Migrasi Paket :}
 \begin{enumerate}
-	\item \textbf{Step 1} - Perintah yang dijalankan sebelum menjalankan perintah \textbf{boidev} lainnya yaitu perintah \textbf{\texttt{boidev config}} untuk konfigurasi program seperti :
-	\label{itm:pre_step1}
+	\item \textbf{Step 1} - Perintah yang dijalankan sebelum menjalankan perintah \textbf{boidev} lainnya yaitu perintah \textbf{\texttt{boidev config}} untuk konfigurasi program seperti:\label{itm:pre_step1}
 	\begin{itemize}
 		\item Memasukkan nama \textbf{time zone},
 		\item Memasukkan alamat \textbf{Email} yang digunakan di akun \textit{Github} dan maupun alamat \textbf{Email} untuk generate key dengan GnuPG, dan
@@ -255,7 +258,7 @@ Pada bagian ini akan dijelaskan langkah-langkah penggunaan perintah \textbf{boid
 	\begin{itemize}
 		\item Config github, seperti \textit{nama}, \textit{Alamat Email}, dan \textit{Cache Username dan Password}
 		
-		\item Opsi Generate Key GnuPG.\\
+		\item Opsi Generate Key GnuPG.
 		
 		\item Memasukkan alamat bazaar repositori\\ (example: \textbf{http://dev.blankonlinux.or.id/browser/tambora})
 
@@ -310,7 +313,7 @@ Reading package lists... Done
 \end{lstlisting}
 
 \noindent
-Setelah proses diatas maka akan di install beberapa paket-paket yang dibutuhkan oleh \textbf{Tim Pemaket} selesai terinstalasi. Kemudian akan tampil Form seperti berikut dan masukkan nomor sesuai dengan yang ada di \textbf{List}.
+Setelah proses diatas, maka akan di install beberapa paket-paket yang dibutuhkan oleh \textbf{Tim Pemaket} selesai terinstalasi. Kemudian akan tampil Form seperti berikut dan masukkan nomor sesuai dengan yang ada di \textbf{List}.
 
 \begin{lstlisting}[language=ShellBash]
 
@@ -617,7 +620,6 @@ Enter Number choice : 1
 Output :
 
 \begin{lstlisting}[language=ShellBash]
-
 "gnome-documents" has success added.
 "gnome-font-viewer" has success added.
 "gnome-icon-theme" has success added.
@@ -960,7 +962,7 @@ Output :
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=13cm]{boidev_bzr2git_list-pkg-check.png}
+	\includegraphics[width=14cm]{boidev_bzr2git_list-pkg-check.png}
 	\caption{List Packages}
 	\label{fig:bab2_list_pkg_check}
 \end{figure}
@@ -1103,6 +1105,7 @@ List Group packages to Migration :
 ---------------------------------------------
 
 You want to migration all packages in group "github-end-1 [10]" ? [y or n] y
+
 
 [migration] All packages in group "github-end-1" 
 ------------------------------------------------------------------------
