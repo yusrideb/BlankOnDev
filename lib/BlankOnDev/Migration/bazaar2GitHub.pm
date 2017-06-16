@@ -1090,6 +1090,7 @@ sub remove_pkg_grp {
     my $confirm_remove;
     my $confirm_remove_pkg;
     my $confirm_add_pkggrp;
+    my $form_rename_pkg_grp;
     my $confirm_rename_pkg_grp = 0;
     my $new_group_name = '';
 
@@ -1144,8 +1145,8 @@ sub remove_pkg_grp {
             if ($confirm_remove_pkg == 0 and $confirm_add_pkggrp == 1) {
                 print "\n";
                 print "You want to rename group in data packages [y/n] : ";
-                chomp($confirm_rename_pkg_grp = <STDIN>);
-                if ($confirm_rename_pkg_grp eq 'y' or $confirm_rename_pkg_grp eq 'y') {
+                chomp($form_rename_pkg_grp = <STDIN>);
+                if ($form_rename_pkg_grp eq 'y' or $form_rename_pkg_grp eq 'Y') {
                     $confirm_rename_pkg_grp = 1;
                     print "Enter new group name : ";
                     chomp($new_group_name = <STDIN>);
@@ -1161,6 +1162,7 @@ sub remove_pkg_grp {
             my $size_list = scalar keys(@list_pkgs);
             while ($i < $size_list) {
                 my $data_list_pkgs = $list_pkgs[$i]->{'name'};
+                my $data_old_pkg_grp = $list_pkgs[$i]->{'group'};
                 my $locdir_datapkg = $locdir_rilis.'/'.$input_group.'/'.$data_list_pkgs;
 
                 if ($confirm_remove_pkg == 1) {
@@ -1168,10 +1170,10 @@ sub remove_pkg_grp {
                     my $prepare_cfgPkgs = prepare_config();
                     $dataPkg_cfg = $prepare_cfgPkgs->{'remove-pkg'}($dataPkg_cfg, $data_list_pkgs);
                 } else {
-                    if ($confirm_rename_pkg_grp == 1) {
+                    if ($confirm_rename_pkg_grp eq 1) {
                         # Prepare Config :
                         my $prepare_cfgPkgs = prepare_config();
-                        $dataPkg_cfg = $prepare_cfgPkgs->{'rename-pkg'}($dataPkg_cfg, $new_group_name);
+                        $dataPkg_cfg = $prepare_cfgPkgs->{'rename-pkg-group'}($dataPkg_cfg, $data_old_pkg_grp, $new_group_name, $data_list_pkgs);
                     }
                 }
 
@@ -1200,27 +1202,16 @@ sub remove_pkg_grp {
             print "Group name \"$input_group\" has success deleted...\n\n";
 
             if ($confirm_add_pkggrp == 1) {
-                # Form New Group Name :
-                print "\n";
-                print "Enter new group name : ";
-                chomp($new_input_group = <STDIN>);
-                if ($new_input_group ne '') {
 
+                # add Group Name :
+                my $add_grp = prepare_config();
+                $dataPkg_cfg = $add_grp->{'add-group'}($dataPkg_cfg, $new_group_name);
 
+                # Save Config :
+                $saveConfig = save_newConfig();
+                $saveConfig->{'addgroup'}($dataPkg_cfg);
 
-                    # add Group Name :
-                    my $add_grp = prepare_config();
-                    $dataPkg_cfg = $add_grp->{'add-group'}($dataPkg_cfg, $new_input_group);
-
-                    # Save Config :
-                    $saveConfig = save_newConfig();
-                    $saveConfig->{'addgroup'}($dataPkg_cfg);
-
-                    print "Add group name \"$new_input_group\" has success added...\n\n";
-                } else {
-                    $confirm_add_pkggrp = 0;
-                    print "Input New group name is empty...\n\n";
-                }
+                print "Add group name \"$new_group_name\" has success added...\n\n";
             }
         } else {
             print "\n";
