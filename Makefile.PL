@@ -21,7 +21,7 @@ WriteMakefile(
         "script/boidev"
     ],
     "LICENSE" => "perl",
-    "MIN_PERL_VERSION" => "5.01205",
+    "MIN_PERL_VERSION" => "5.020002",
     "NAME" => "BlankOnDev",
     "PREREQ_PM" => {
         "Crypt::Blowfish" => 0,
@@ -47,6 +47,16 @@ WriteMakefile(
         "Test::Requires" => 0
     },
     "VERSION_FROM" => 'lib/BlankOnDev/Version.pm',
+    META_MERGE => {
+        "meta-spec" => { version => 2 },
+        resources => {
+            repository => {
+                type => 'git',
+                url => 'https://github.com/yusrideb/BlankOnDev.git',
+                web => 'https://github.com/yusrideb/BlankOnDev'
+            }
+        }
+    }
 );
 
 {

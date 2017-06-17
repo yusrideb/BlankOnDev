@@ -34,7 +34,7 @@ Revision history for Perl extension BlankOnDev.
     - add POD file lib/BlankOnDev/DateTime/lang.pod
     - enable script/boidev
 
-0.1004  Sat Jun 07 19:56:35 2017
+0.1004  Mon Jun 12 19:56:35 2017
     - fix file script "boidev"
     - fix Version format on all files
     - fix file lib/BlankOnDev.pm
@@ -55,3 +55,12 @@ Revision history for Perl extension BlankOnDev.
     - command "boidev prepare" change to "boidev bzr2git prepare".
     - add function command "boidev rilis"
     - check and kill process on all command "boidev".
+
+0.1005  Wed Jun 14 04:58:35 2017
+    - fix documentation.
+    - fix version on BlankOnDev::enkripsi
+    - fix module BlankOnDev::Form::github
+    - fix module BlankOnDev::Form
+    - fix module BlankOnDev::config
+    - Fix problem while for action migration on command "boidev bzr2git"
+    - Remove form cache Username & Password Github.
