@@ -2294,8 +2294,8 @@ sub _list_pkg {
                         my $group_name = $list_pkgs[$i]->{'group'};
                         my $pkg_name = $list_pkgs[$i]->{'name'};
                         my $date_add = $list_pkgs[$i]->{'date-add'};
-                        my $date_branch = $list_pkgs[$i]->{'date-branch'} eq '' ? '-' : $list_pkgs[$i]->{'date-branch'};
-                        my $date_gitpush = $list_pkgs[$i]->{'date-gitpush'} eq '' ? '-' : $list_pkgs[$i]->{'date-gitpush'};
+                        $date_branch = $list_pkgs[$i]->{'date-branch'} eq '' ? '-' : $list_pkgs[$i]->{'date-branch'};
+                        $date_gitpush = $list_pkgs[$i]->{'date-gitpush'} eq '' ? '-' : $list_pkgs[$i]->{'date-gitpush'};
                         my $status_branch = $list_pkgs[$i]->{'status'}->{'bzr-branch'};
                         my $status_gitpush = $list_pkgs[$i]->{'status'}->{'git-push'};
                         my $status_gitCgit = $list_pkgs[$i]->{'status'}->{'bzrConvertGit'};
