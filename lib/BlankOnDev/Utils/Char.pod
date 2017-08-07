@@ -6,7 +6,7 @@
 
 BlankOnDev::Utils::Char - Utilities BlankOnDev Web Framework to split string.
 
-=head SYNOPSIS
+=head1 SYNOPSIS
     
     use BlankOnDev::Utils::Char
      

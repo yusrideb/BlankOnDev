@@ -629,7 +629,7 @@ Form berikut yaitu form B<Github config> :
     # tersimpan pada system. Jika tidak langsung tekan Enter
     Enter your github email [linuxer08@gmail.com] :
 
-=item Jika inputnya B<C<n>> maka akan dilanjutkan ke form berikutnya.
+=item * Jika inputnya B<C<n>> maka akan dilanjutkan ke form berikutnya.
 
 =back
 
