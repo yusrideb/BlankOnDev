@@ -114,9 +114,13 @@ sub git_push {
     my $cmd_gitremote = $git_remote.' '.$git_url.'/'.$pkg_name.'.git';
     my $cmd_gitpush = "$git_resetHead; rm -rf .bzr; ";
     $cmd_gitpush .= "$cmd_gitremote; ";
-    $cmd_gitpush .= "$git_push; ";
-    $cmd_gitpush .= "$git_checkout $rilis; ";
-    $cmd_gitpush .= "$git_push_repo $rilis";
+    if ($rilis eq 'uluwatu') {
+        $cmd_gitpush .= "$git_push; ";
+    } else {
+        $cmd_gitpush .= "$git_push; ";
+        $cmd_gitpush .= "$git_checkout $rilis; ";
+        $cmd_gitpush .= "$git_push_repo $rilis";
+    }
 
     cmd_gitpush($locfile_outlogs, $locfile_errlogs, $dirOfPkgs, $cmd_gitpush);
 
@@ -275,8 +279,15 @@ sub repush_git {
     push @cmdGit, "rm -rf .bzr; ";
     push @cmdGit, "$git_add *; ";
     push @cmdGit, "$git_remote $git_url/$pkg_name.git; ";
-    push @cmdGit, "$git_push; ";
-    push @cmdGit, "$git_push_force; ";
+    if ($rilis eq 'uluwatu') {
+        push @cmdGit, "$git_push; ";
+        push @cmdGit, "$git_push_force; ";
+    } else {
+        push @cmdGit, "$git_checkout $rilis; ";
+        push @cmdGit, "$git_push_repo $rilis";
+        push @cmdGit, "$git_push_repo $rilis --force";
+    }
+
     push @cmdGit, "$git_checkout $rilis; ";
     push @cmdGit, "$git_push_repo $rilis";
     my $cmd_gitpush = "$cmd_git";
@@ -462,9 +473,12 @@ sub bzr2git_gitpush {
     my $cmd_gitremote = $git_remote.' '.$git_url.'/'.$pkg_name.'.git';
     my $cmd_gitpush = "$git_resetHead; rm -rf .bzr; ";
     $cmd_gitpush .= "$cmd_gitremote; ";
-    $cmd_gitpush .= "$git_push; ";
-    $cmd_gitpush .= "$git_checkout $build_rilis; ";
-    $cmd_gitpush .= "$git_push_repo $build_rilis";
+    if ($build_rilis eq 'uluwatu') {
+        $cmd_gitpush .= "$git_push; ";
+    } else {
+        $cmd_gitpush .= "$git_checkout $build_rilis; ";
+        $cmd_gitpush .= "$git_push_repo $build_rilis";
+    }
 
     cmd_gitpush($locfile_outlogs, $locfile_errlogs, $dirOfPkgs, $cmd_gitpush);
 
@@ -545,10 +559,14 @@ sub bzr2git_reGitpush {
     $cmd_git .= "rm -rf .bzr; ";
     $cmd_git .= "$git_add *; ";
     $cmd_git .= "$git_remote $git_url/$pkg_name.git; ";
-    $cmd_git .= "$git_push; ";
-    $cmd_git .= "$git_push_force; ";
-    $cmd_git .= "$git_checkout $build_rilis; ";
-    $cmd_git .= "$git_push_repo $build_rilis";
+    if ($build_rilis eq 'uluwatu') {
+        $cmd_git .= "$git_push; ";
+        $cmd_git .= "$git_push_force; ";
+    } else {
+        $cmd_git .= "$git_checkout $build_rilis; ";
+        $cmd_git .= "$git_push_repo $build_rilis";
+        $cmd_git .= "$git_push_repo $build_rilis --force";
+    }
     my $cmd_gitpush = "$cmd_git";
     my $cmd_gitpush_force = "cd $dirOfPkgs; $git_push_force";
 
